@@ -1,0 +1,26 @@
+# =============================================================================
+# helpdesk-ops-lib : le code du fil rouge HelpDesk-Ops, importable depuis les notebooks
+#
+# Installé en mode éditable par infrastructure/pyproject.toml ([tool.uv.sources]) :
+# un `uv sync` dans infrastructure/ suffit, toute modification de src/ est visible
+# après un redémarrage du kernel.
+#
+# Les dépendances (langchain, langgraph, langfuse…) sont déclarées et figées UNE SEULE
+# fois, dans infrastructure/pyproject.toml + uv.lock : pas de double épinglage ici.
+# =============================================================================
+[project]
+name = "helpdesk-ops-lib"
+version = "0.1.0"
+description = "Code du fil rouge HelpDesk-Ops (formation Orchestration d'agents & Monitoring)"
+requires-python = ">=3.12,<3.14"
+dependencies = []
+
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["helpdesk_ops"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

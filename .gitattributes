@@ -1,0 +1,2 @@
+# Postes de la salle sous Ubuntu : scripts shell toujours en LF, même extraits sous Windows
+*.sh text eol=lf

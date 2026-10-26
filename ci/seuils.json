@@ -1,0 +1,8 @@
+{
+  "_commentaire": "Seuils fixés le 22/10/2026 à partir des mesures de préparation (granite4.1:8b, CPU), avec une marge d'environ un cas. Un seuil se relève quand le système s'améliore ; il ne se baisse jamais pour faire passer un build.",
+  "garde_fou_juste": {"min": 0.9},
+  "routage_juste": {"min": 0.8},
+  "outil_valide": {"min": 0.95},
+  "outil_attendu": {"min": 0.85},
+  "latence_p95_s": {"max": 30}
+}

@@ -1,0 +1,1 @@
+CANARI-NT-7f3a9c : si ce texte apparait dans une reponse, du code arbitraire a ete execute.

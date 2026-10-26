@@ -1,0 +1,4 @@
+# Checkpoints LangGraph : conversations EN CLAIR (données personnelles).
+# Jamais dans Git ni dans une archive distribuée.
+*
+!.gitignore

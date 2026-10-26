@@ -1,0 +1,9 @@
+{
+  "$schema": "https://langgra.ph/schema.json",
+  "dependencies": ["./src"],
+  "graphs": {
+    "helpdesk": "./src/helpdesk_ops/jalons/j5.py:graphe"
+  },
+  "env": "./infrastructure/.env",
+  "python_version": "3.12"
+}

@@ -1,0 +1,53 @@
+# Gate d'évaluation HelpDesk-Ops (jour 5). À copier dans .github/workflows/eval-gate.yml du dépôt.
+#
+# Deux jobs :
+#   tests : les tests unitaires (sans réseau, modèle simulé) sur un runner GitHub standard ;
+#   gate  : les experiments sur la stack locale (Ollama, Qdrant, Langfuse). Ils exigent un runner
+#           AUTO-HÉBERGÉ (labels self-hosted + helpdesk-gpu) : la promesse « 100 % local » interdit
+#           d'envoyer le dataset et les prompts vers un modèle cloud depuis un runner hébergé.
+# Le job gate échoue si un score passe sous son seuil (ci/seuils.json) : la PR ne peut pas être fusionnée
+# si la règle de protection de branche exige ce check.
+name: eval-gate
+
+on:
+  pull_request:
+    paths: ["src/**", "data/eval/**", "data/kb/**", "ci/**", "infrastructure/pyproject.toml", "infrastructure/uv.lock"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: Environnement figé (uv.lock)
+        run: uv sync --project infrastructure --frozen
+      - name: Tests unitaires (sans Ollama ni Langfuse)
+        run: uv run --project infrastructure pytest src/tests -q
+
+  gate:
+    needs: tests
+    runs-on: [self-hosted, helpdesk-gpu]
+    timeout-minutes: 90
+    env:
+      # Clés du projet Langfuse de CI : secrets du dépôt, jamais dans le code ni dans les journaux
+      LANGFUSE_PUBLIC_KEY: ${{ secrets.LANGFUSE_PUBLIC_KEY }}
+      LANGFUSE_SECRET_KEY: ${{ secrets.LANGFUSE_SECRET_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Environnement figé (uv.lock)
+        run: uv sync --project infrastructure --frozen
+      - name: Stack locale disponible ?
+        run: uv run --project infrastructure python infrastructure/smoke_test.py
+      - name: Experiments et seuils
+        run: uv run --project infrastructure python ci/eval_gate.py
+      - name: Rapport
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rapport-gate
+          path: ci/rapport_gate.md

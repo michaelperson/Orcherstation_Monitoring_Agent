@@ -1,0 +1,9 @@
+# Lu par « streamlit run » lancé depuis la racine du cours (stack 100 % locale)
+[browser]
+# Vérifié le 22/10/2026 : Streamlit 1.64 envoie des statistiques d'usage par défaut
+gatherUsageStats = false
+
+[server]
+# Jamais 0.0.0.0 : l'interface n'est pas exposée au réseau
+address = "127.0.0.1"
+headless = true

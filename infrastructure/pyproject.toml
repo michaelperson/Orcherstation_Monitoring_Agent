@@ -1,0 +1,59 @@
+# =============================================================================
+# HelpDesk-Ops : projet Python géré par uv (versions vérifiées le 2026-09-28)
+#
+#   uv sync                      # crée .venv et installe EXACTEMENT uv.lock
+#   uv run jupyter lab           # lance JupyterLab dans l'environnement
+#   uv run smoke_test.py         # vérifie le poste
+#   uv lock --upgrade            # (formateur) met à jour les versions, puis commit de uv.lock
+#
+# Règle des bornes : « >= version testée, < prochaine majeure ».
+# uv.lock est UNIVERSEL (Linux salle + Windows préparation) : un seul fichier à commiter.
+# =============================================================================
+[project]
+name = "helpdesk-ops"
+version = "0.1.0"
+description = "Formation Orchestration d'agents & Monitoring : LangGraph + Langfuse, stack 100 % locale"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+    # --- Orchestration ---------------------------------------------------------
+    "langchain[mcp]>=1.4.2,<2",            # create_agent, middlewares, langchain.mcp (bêta)
+    "langchain-core>=1.6.5,<2",
+    "langgraph>=1.2.12,<2",                # StateGraph, interrupt, Send, RetryPolicy, TimeoutPolicy
+    "langgraph-checkpoint-sqlite>=3.1.1,<4",
+    # --- Modèles & RAG locaux --------------------------------------------------
+    "langchain-ollama>=1.1.0,<2",
+    "langchain-huggingface>=1.2.2,<2",
+    "sentence-transformers>=6.1.0,<7",     # tire torch : wheels CUDA sous Linux, CPU sous Windows
+    "langchain-qdrant>=1.1.0,<2",          # QdrantVectorStore (utilise query_points)
+    "qdrant-client>=1.19.1,<2",            # aligné sur le serveur Qdrant v1.19
+    "langchain-text-splitters>=1.1.2,<2",
+    "pypdf>=6.19.0,<7",
+    # --- Monitoring --------------------------------------------------------------
+    "langfuse>=4.15.6,<5",                 # ⚠️ SDK v4 : propagate_attributes, run_experiment, LANGFUSE_BASE_URL
+    # --- Logique métier, UI, outillage --------------------------------------------
+    "pydantic>=2.13.5,<3",
+    "python-dotenv>=1.2.3,<2",
+    "streamlit>=1.64.0,<2",
+    "httpx>=0.28.1,<1",
+    # --- Code du fil rouge (../src, installé en mode éditable) -------------------
+    "helpdesk-ops-lib",
+    "fastembed>=0.7,<1",
+    "deepagents>=0.7.19,<0.7.20",            # démo J3 ; 0.7.19 est compatible avec le lock gelé (0.7.29 tire langchain 1.4.6)
+]
+
+[dependency-groups]
+# Installé par défaut avec `uv sync` (groupe « dev » = défaut uv)
+dev = [
+    "jupyterlab>=4.6.4,<5",                # rendu Mermaid natif dans les cellules Markdown
+    "ipykernel>=7.3.0,<8",
+    "grandalf>=0.8,<1",                    # graph.get_graph().draw_ascii() hors ligne
+    "pytest>=8,<10",                       # tests de src/ : uv run pytest ../src/tests
+]
+
+[tool.uv]
+required-version = ">=0.12"                # uv récent : lock universel, résolution stable
+package = false                            # projet d'application : pas de paquet à construire
+
+[tool.uv.sources]
+# src/helpdesk_ops : modifiable sans réinstaller (redémarrer le kernel suffit)
+helpdesk-ops-lib = { path = "../src", editable = true }

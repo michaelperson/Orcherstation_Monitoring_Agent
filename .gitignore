@@ -1,0 +1,19 @@
+# Racine du dépôt de la formation (voir aussi infrastructure/.gitignore et data/*/.gitignore)
+__pycache__/
+.ipynb_checkpoints/
+# État local du serveur « langgraph dev » : conversations en clair
+.langgraph_api/
+ci/rapport_gate.md
+ci/scores_gate.json
+
+# Dépôt apprenants (github.com/michaelperson/Orcherstation_Monitoring_Agent) : rien du formateur
+guide_formateur/
+exercices/corriges/
+AUDIT_FORMATION_Agents_Monitoring.md
+Prepa/
+# Générateurs : les build_ex*.py contiennent les corrigés ; gabarit et polices des decks
+notebooks/_sources/
+# Decks : non distribués par Git (décision du 26/10)
+supports/
+# Traces locales du red-team (prompts d'attaque rejoués sur le poste)
+data/redteam/audit_redteam.jsonl
