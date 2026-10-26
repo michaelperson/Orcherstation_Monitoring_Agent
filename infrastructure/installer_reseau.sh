@@ -18,6 +18,7 @@ JOURNAL=../data/logs/installation_fond.log
 COMPOSE=(docker compose -f docker-compose.yml)
 command -v nvidia-smi >/dev/null && COMPOSE+=(-f docker-compose.gpu.yml)   # sans GPU : Ollama sur CPU
 export PATH="$HOME/.local/bin:$PATH"
+export PYTHONUTF8=1                     # --fond écrit dans un fichier : sous Windows, Python passerait en cp1252 (emojis)
 CACHE_FASTEMBED="$HOME/.cache/fastembed"
 command -v cygpath >/dev/null && CACHE_FASTEMBED=$(cygpath -m "$CACHE_FASTEMBED")   # Git Bash : chemin Windows
 
