@@ -15,8 +15,11 @@ UV_VERSION=0.12.19                      # version de préparation
 SEUIL_VRAM_MO=12000                     # gemma4:12b ≈ 8 Go + contexte
 CIBLES=../data/logs/modeles_cibles.env  # modèles prévus par generate_env.py
 JOURNAL=../data/logs/installation_fond.log
-COMPOSE=(docker compose -f docker-compose.yml -f docker-compose.gpu.yml)
+COMPOSE=(docker compose -f docker-compose.yml)
+command -v nvidia-smi >/dev/null && COMPOSE+=(-f docker-compose.gpu.yml)   # sans GPU : Ollama sur CPU
 export PATH="$HOME/.local/bin:$PATH"
+CACHE_FASTEMBED="$HOME/.cache/fastembed"
+command -v cygpath >/dev/null && CACHE_FASTEMBED=$(cygpath -m "$CACHE_FASTEMBED")   # Git Bash : chemin Windows
 
 vram_mo() {
   command -v nvidia-smi >/dev/null || { echo 0; return; }
@@ -67,7 +70,7 @@ mkdir -p ../data/logs
 grep -q '^FASTEMBED_CACHE_PATH=' .env || {
   echo ""
   echo "# Cache persistant (sinon FastEmbed écrit dans /tmp, vidé au redémarrage)"
-  echo "FASTEMBED_CACHE_PATH=$HOME/.cache/fastembed"
+  echo "FASTEMBED_CACHE_PATH=$CACHE_FASTEMBED"
 } >> .env
 AGENT=$(valeur MODEL_AGENT .env)
 for var in MODEL_AGENT_ALT MODEL_SMALL MODEL_JUDGE; do poser $var "$AGENT"; done
