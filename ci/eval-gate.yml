@@ -2,7 +2,7 @@
 #
 # Deux jobs :
 #   tests : les tests unitaires (sans réseau, modèle simulé) sur un runner GitHub standard ;
-#   gate  : les experiments sur la stack locale (Ollama, Qdrant, Langfuse). Ils exigent un runner
+#   gate  : les experiments sur la stack locale (vLLM ou Ollama, Qdrant, Langfuse). Ils exigent un runner
 #           AUTO-HÉBERGÉ (labels self-hosted + helpdesk-gpu) : la promesse « 100 % local » interdit
 #           d'envoyer le dataset et les prompts vers un modèle cloud depuis un runner hébergé.
 # Le job gate échoue si un score passe sous son seuil (ci/seuils.json) : la PR ne peut pas être fusionnée
@@ -26,7 +26,7 @@ jobs:
       - uses: astral-sh/setup-uv@v6
       - name: Environnement figé (uv.lock)
         run: uv sync --project infrastructure --frozen
-      - name: Tests unitaires (sans Ollama ni Langfuse)
+      - name: Tests unitaires (sans moteur LLM ni Langfuse)
         run: uv run --project infrastructure pytest src/tests -q
 
   gate:

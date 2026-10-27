@@ -1,0 +1,102 @@
+# =============================================================================
+# Surcharge vLLM (salle de formation, Ubuntu + GPU NVIDIA RTX PRO 4000 Blackwell, 24 Go)
+#
+# Prérequis sur l'hôte : pilote NVIDIA ≥ 580 (image CUDA 13) + NVIDIA Container Toolkit
+#   (vérifier avec :  docker run --rm --gpus all ubuntu:24.04 nvidia-smi)
+#
+# Usage (installer_reseau.sh le fait pour vous) :
+#   docker compose -f docker-compose.yml -f docker-compose.vllm.yml up -d
+#   bash vllm_mode.sh juge      # J4 : arrête agent + small, démarre le juge gemma4
+#   bash vllm_mode.sh agents    # retour à agent + small
+#
+# vLLM sert UN modèle par serveur et réserve une fraction FIXE de la VRAM au démarrage
+# (--gpu-memory-utilization). Budget sur 24 Go :
+#   mode « agents » : granite4.1:8b (FP8) 0,60 + granite4.1:3b (FP8) 0,27 ≈ 21 Go
+#   mode « juge »   : gemma4:12b (QAT 4 bits) 0,60, seul
+# Les deux modes ne tiennent pas ensemble : d'où la bascule par vllm_mode.sh.
+#
+# Zéro flux sortant : les poids sont téléchargés une fois (installer_reseau.sh), puis
+# HF_HUB_OFFLINE=1 ; statistiques d'usage vLLM coupées.
+# =============================================================================
+
+x-vllm: &vllm
+  image: docker.io/vllm/vllm-openai:${VLLM_VERSION:-v0.32.0}
+  entrypoint: ["vllm", "serve"]
+  restart: unless-stopped
+  shm_size: 2gb
+  environment:
+    HF_HUB_OFFLINE: "1"
+    HF_HUB_DISABLE_TELEMETRY: "1"
+    VLLM_NO_USAGE_STATS: "1"
+    DO_NOT_TRACK: "1"
+    VLLM_API_KEY: ${VLLM_API_KEY:?lancer generate_env.py}   # Zero Trust, comme Qdrant : pas d'API sans clé
+  volumes:
+    - vllm_cache:/root/.cache          # poids Hugging Face + cache de compilation (démarrages suivants plus rapides)
+  healthcheck:
+    test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+    interval: 10s
+    timeout: 5s
+    retries: 6
+    start_period: 600s                 # 1er démarrage : chargement + compilation + capture des graphes CUDA
+  deploy:
+    resources:
+      reservations:
+        devices:
+          - driver: nvidia
+            count: all
+            capabilities: [gpu]
+
+services:
+  # Ollama devient le repli : il ne démarre plus avec ce fichier (plan B : voir README)
+  ollama:
+    profiles: ["ollama"]
+
+  vllm-agent:
+    <<: *vllm
+    ports:
+      - 127.0.0.1:8001:8000
+    command:
+      - ${VLLM_HF_AGENT:-ibm-granite/granite-4.1-8b-fp8}
+      - --served-model-name=granite4.1:8b
+      - --max-model-len=16384
+      - --gpu-memory-utilization=${VLLM_MEM_AGENT:-0.60}
+      - --max-num-seqs=16
+      - --enable-auto-tool-choice
+      - --tool-call-parser=${VLLM_TOOL_PARSER_GRANITE:-granite4}   # repli possible : hermes (même format <tool_call>)
+
+  vllm-small:
+    <<: *vllm
+    ports:
+      - 127.0.0.1:8002:8000
+    depends_on:
+      vllm-agent:
+        condition: service_healthy     # démarrages en série : chaque serveur mesure la VRAM libre au démarrage
+    command:
+      - ${VLLM_HF_SMALL:-ibm-granite/granite-4.1-3b-fp8}
+      - --served-model-name=granite4.1:3b
+      - --max-model-len=16384
+      - --gpu-memory-utilization=${VLLM_MEM_SMALL:-0.27}
+      - --max-num-seqs=8
+      - --enable-auto-tool-choice
+      - --tool-call-parser=${VLLM_TOOL_PARSER_GRANITE:-granite4}
+
+  vllm-juge:
+    <<: *vllm
+    profiles: ["juge"]                 # J4 seulement, à la place des deux autres (vllm_mode.sh juge)
+    ports:
+      - 127.0.0.1:8003:8000
+    command:
+      - ${VLLM_HF_JUGE:-google/gemma-4-12B-it-qat-w4a16-ct}
+      - --served-model-name=gemma4:12b
+      - --max-model-len=16384
+      - --gpu-memory-utilization=${VLLM_MEM_JUGE:-0.60}
+      - --max-num-seqs=8
+      - --limit-mm-per-prompt={"image":0,"audio":0}   # texte seul : pas de profilage des encodeurs image/audio
+      - --enable-auto-tool-choice
+      - --tool-call-parser=gemma4
+      - --reasoning-parser=gemma4
+      - --chat-template=/vllm-workspace/examples/tool_chat_template_gemma4.jinja   # le gabarit du checkpoint ignore les outils
+
+volumes:
+  vllm_cache:
+    driver: local

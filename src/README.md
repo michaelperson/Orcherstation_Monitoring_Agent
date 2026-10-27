@@ -9,7 +9,7 @@ Rien à faire : `uv sync` dans `infrastructure/` l'installe en mode **éditable*
 ```bash
 cd infrastructure
 uv sync
-uv run pytest ../src/tests        # 79 tests, sans Ollama ni Langfuse (modèle simulé, tracing désactivé)
+uv run pytest ../src/tests        # 79 tests, sans moteur LLM ni Langfuse (modèle simulé, tracing désactivé)
 ```
 
 ## Contenu

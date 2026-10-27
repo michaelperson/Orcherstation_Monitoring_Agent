@@ -9,7 +9,9 @@ Pourquoi un script plutôt qu'un .env copié à la main ?
   - Les mêmes clés sont écrites pour le SDK Python (LANGFUSE_PUBLIC_KEY /
     LANGFUSE_SECRET_KEY / LANGFUSE_BASE_URL), lu par les notebooks.
   - Qdrant est protégé par une clé API aléatoire (QDRANT_API_KEY), même en local :
-    principe Zero Trust, aucun service sans authentification.
+    principe Zero Trust, aucun service sans authentification. Idem pour vLLM (VLLM_API_KEY).
+  - Moteur LLM : vLLM si `nvidia-smi` répond (salle GPU), sinon Ollama (préparation sans GPU).
+    Forcer avec --moteur vllm|ollama.
 
 Usage :
     uv run generate_env.py            # crée .env (refuse d'écraser un .env existant)
@@ -21,6 +23,7 @@ Aucune dépendance externe : bibliothèque standard uniquement.
 
 import argparse
 import secrets
+import shutil
 from pathlib import Path
 
 ENV_PATH = Path(__file__).parent / ".env"
@@ -31,7 +34,12 @@ def hex_secret(nbytes: int = 16) -> str:
     return secrets.token_hex(nbytes)
 
 
-def build_env() -> tuple[str, str]:
+def moteur_par_defaut() -> str:
+    """vLLM exige un GPU NVIDIA : sans `nvidia-smi`, on se rabat sur Ollama (qui tourne aussi sur CPU)."""
+    return "vllm" if shutil.which("nvidia-smi") else "ollama"
+
+
+def build_env(moteur: str) -> tuple[str, str]:
     pg_password = hex_secret()
     ch_password = hex_secret()
     redis_password = hex_secret()
@@ -46,8 +54,19 @@ def build_env() -> tuple[str, str]:
         "# Généré par generate_env.py. NE PAS COMMITER (voir .gitignore)",
         "# ---------------------------------------------------------------",
         "",
-        "# ===== Modèles Ollama (lus par les notebooks) =====",
+        "# ===== Moteur LLM (lu par helpdesk_ops.config.creer_llm) =====",
+        "# vllm : salle GPU (docker-compose.vllm.yml) · ollama : préparation sans GPU, plan B en salle",
+        f"LLM_BACKEND={moteur}",
         "OLLAMA_BASE_URL=http://127.0.0.1:11434",   # 127.0.0.1 et non localhost : voir README (IPv6 sous Windows)
+        "# vLLM : un serveur par modèle ; alt et judge partagent le serveur gemma4 (mode « juge », J4)",
+        "VLLM_URL_AGENT=http://127.0.0.1:8001/v1",
+        "VLLM_URL_SMALL=http://127.0.0.1:8002/v1",
+        "VLLM_URL_ALT=http://127.0.0.1:8003/v1",
+        "VLLM_URL_JUDGE=http://127.0.0.1:8003/v1",
+        f"VLLM_API_KEY={hex_secret(24)}",
+        "VLLM_VERSION=v0.32.0",
+        "",
+        "# ===== Modèles (mêmes noms sur les deux moteurs : --served-model-name côté vLLM) =====",
         "# Préparation sans GPU : mettre MODEL_AGENT=granite4.1:3b pour itérer vite",
         "MODEL_AGENT=granite4.1:8b",
         "MODEL_AGENT_ALT=gemma4:12b",
@@ -109,12 +128,14 @@ def build_env() -> tuple[str, str]:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Génère le .env de la stack HelpDesk-Ops")
     parser.add_argument("--force", action="store_true", help="écrase un .env existant")
+    parser.add_argument("--moteur", choices=["vllm", "ollama"], default=moteur_par_defaut(),
+                        help="moteur LLM (défaut : vllm si nvidia-smi est présent, sinon ollama)")
     args = parser.parse_args()
 
     if ENV_PATH.exists() and not args.force:
         raise SystemExit(f"❌ {ENV_PATH} existe déjà. Utilise --force pour le régénérer.")
 
-    content, user_password = build_env()
+    content, user_password = build_env(args.moteur)
     ENV_PATH.write_text(content, encoding="utf-8")
 
     print(f"✅ {ENV_PATH} créé.")
@@ -122,6 +143,7 @@ def main() -> None:
     print("   Login       : apprenant@helpdesk.local")
     print(f"   Mot de passe: {user_password}   (aussi dans .env)")
     print("   Qdrant      : http://localhost:6333/dashboard  (clé : QDRANT_API_KEY dans .env)")
+    print(f"   Moteur LLM  : {args.moteur}")
 
 
 if __name__ == "__main__":

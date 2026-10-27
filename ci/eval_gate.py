@@ -5,7 +5,7 @@
 
 Code de sortie 1 si un score passe sous son seuil (ci/seuils.json) : le pipeline s'arrête, rien n'est déployé.
 Les runs sont enregistrés dans Langfuse (dataset « helpdesk-ops-eval ») : le rapport donne les chiffres, Langfuse
-le détail cas par cas. Nécessite la stack locale (Ollama, Qdrant, Langfuse) : en CI, un runner auto-hébergé.
+le détail cas par cas. Nécessite la stack locale (vLLM ou Ollama, Qdrant, Langfuse) : en CI, un runner auto-hébergé.
 """
 import argparse
 import json

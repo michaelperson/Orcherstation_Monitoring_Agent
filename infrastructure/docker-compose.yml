@@ -249,6 +249,10 @@ services:
       OLLAMA_KEEP_ALIVE: ${OLLAMA_KEEP_ALIVE:-30m}        # garde le modèle en mémoire entre 2 appels
       OLLAMA_CONTEXT_LENGTH: ${OLLAMA_CONTEXT_LENGTH:-16384}  # contexte par défaut (agents = prompts longs)
       OLLAMA_MAX_LOADED_MODELS: ${OLLAMA_MAX_LOADED_MODELS:-2}  # agent + juge chargés ensemble
+      # Échange de clés post-quantique (X25519MLKEM768, actif par défaut depuis Go 1.24) coupé : son
+      # ClientHello plus gros est perdu par certains réseaux et `ollama pull` échoue en « TLS handshake
+      # timeout ». Constaté le 27/10/2026 (curl passait, Ollama non). Vider OLLAMA_GODEBUG pour le rétablir.
+      GODEBUG: ${OLLAMA_GODEBUG-tlsmlkem=0}
     volumes:
       - ollama_models:/root/.ollama     # les modèles survivent à un `docker compose down`
     healthcheck:

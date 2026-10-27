@@ -18,6 +18,7 @@ Graphe asynchrone (les timeouts l'exigent) : utiliser `ainvoke` / `astream`.
 from typing import Awaitable, Callable, Literal
 
 import httpx
+import openai
 from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, ToolMessage
 from langchain_core.runnables import RunnableConfig
@@ -33,6 +34,9 @@ from helpdesk_ops.outils import chercher_kb, statut_serveur
 from helpdesk_ops.reseau import ping_serveur
 from helpdesk_ops.ticketing import TICKETING, Ticketing
 from helpdesk_ops.tri import file_attente
+
+# Pannes transitoires d'un appel LLM, quel que soit le moteur (Ollama ou vLLM)
+ERREURS_RESEAU_LLM = (ConnectionError, httpx.TransportError, openai.APIConnectionError, openai.InternalServerError)
 
 OUTILS = [statut_serveur, chercher_kb, ping_serveur]
 
@@ -197,15 +201,16 @@ def construire_support_j2(
     b.add_node("garde_fou", garde_fou)
     b.add_node("refus_poli", refus_poli)
     b.add_node("agent", agent,
-               # Réseau : on réessaie (le client Ollama lève ConnectionError, httpx ses TransportError).
+               # Réseau : on réessaie (client Ollama : ConnectionError, httpx : TransportError ;
+               # client OpenAI de vLLM : APIConnectionError, ou InternalServerError pour un 5xx).
                # Timeout : PAS de nouvel essai (sur CPU, 3 × 2 min) → repli direct via agent_en_echec.
-               retry_policy=RetryPolicy(max_attempts=tentatives, retry_on=(ConnectionError, httpx.TransportError)),
+               retry_policy=RetryPolicy(max_attempts=tentatives, retry_on=ERREURS_RESEAU_LLM),
                timeout=TimeoutPolicy(run_timeout=timeout_llm_s), error_handler=agent_en_echec)
     b.add_node("tools", ToolNode(OUTILS),
                retry_policy=RetryPolicy(max_attempts=tentatives, initial_interval=0.2, retry_on=ConnectionError),
                timeout=TimeoutPolicy(run_timeout=timeout_outil_s), error_handler=outils_en_echec)
     b.add_node("qualifier", qualifier,
-               retry_policy=RetryPolicy(max_attempts=tentatives, retry_on=(ConnectionError, httpx.TransportError)),
+               retry_policy=RetryPolicy(max_attempts=tentatives, retry_on=ERREURS_RESEAU_LLM),
                timeout=TimeoutPolicy(run_timeout=timeout_llm_s), error_handler=qualification_en_echec)
     b.add_node("validation_humaine", validation_humaine)
     b.add_node("creer_ticket", creer_ticket)

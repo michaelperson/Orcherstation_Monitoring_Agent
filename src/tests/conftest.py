@@ -1,4 +1,4 @@
-"""Tests sans réseau : ni Ollama ni Langfuse. Le modèle est simulé, le tracing est désactivé."""
+"""Tests sans réseau : ni moteur LLM (vLLM, Ollama) ni Langfuse. Le modèle est simulé, le tracing est désactivé."""
 import asyncio
 import os
 

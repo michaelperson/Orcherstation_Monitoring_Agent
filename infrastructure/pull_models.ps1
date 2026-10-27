@@ -1,4 +1,5 @@
 # pull_models.ps1 : version Windows (poste de préparation) de pull_models.sh
+# Ollama seulement (LLM_BACKEND=ollama). Avec vLLM, les poids se téléchargent par installer_reseau.sh.
 $ErrorActionPreference = "Stop"
 Set-Location $PSScriptRoot
 

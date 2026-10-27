@@ -21,7 +21,8 @@ dependencies = [
     "langgraph>=1.2.12,<2",                # StateGraph, interrupt, Send, RetryPolicy, TimeoutPolicy
     "langgraph-checkpoint-sqlite>=3.1.1,<4",
     # --- Modèles & RAG locaux --------------------------------------------------
-    "langchain-ollama>=1.1.0,<2",
+    "langchain-ollama>=1.1.0,<2",          # repli : préparation sans GPU, plan B en salle
+    "langchain-openai>=1.6.6,<1.7",        # vLLM (API compatible OpenAI) ; 1.7 exigerait langchain-core 1.7 (lock gelé)
     "langchain-huggingface>=1.2.2,<2",
     "sentence-transformers>=6.1.0,<7",     # tire torch : wheels CUDA sous Linux, CPU sous Windows
     "langchain-qdrant>=1.1.0,<2",          # QdrantVectorStore (utilise query_points)

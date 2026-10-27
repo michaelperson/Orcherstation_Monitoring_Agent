@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # pull_models.sh : pré-télécharge les modèles dans le conteneur Ollama.
+# Ollama seulement (LLM_BACKEND=ollama). Avec vLLM, les poids se téléchargent par installer_reseau.sh.
 # À lancer AVANT la formation (≈ 15 Go au total) : le Wi-Fi de salle ne suffira pas.
 set -euo pipefail
 cd "$(dirname "$0")"

@@ -63,7 +63,10 @@ def decouper(articles: list[Document], taille: int = 700) -> list[Document]:
 def embeddings_denses():
     from langchain_huggingface import HuggingFaceEmbeddings
     charger_env()
-    return HuggingFaceEmbeddings(model_name=os.environ["EMBEDDING_MODEL"])
+    # CPU par défaut : la VRAM est réservée aux serveurs vLLM (fraction fixe par serveur), et chaque kernel
+    # qui chargerait les embeddings sur le GPU en prendrait ≈ 1 Go. MiniLM sur CPU suffit pour la KB du cours.
+    return HuggingFaceEmbeddings(model_name=os.environ["EMBEDDING_MODEL"],
+                                 model_kwargs={"device": os.environ.get("EMBEDDING_DEVICE", "cpu")})
 
 
 @lru_cache(maxsize=1)
