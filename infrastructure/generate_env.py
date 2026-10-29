@@ -136,7 +136,8 @@ def main() -> None:
         raise SystemExit(f"❌ {ENV_PATH} existe déjà. Utilise --force pour le régénérer.")
 
     content, user_password = build_env(args.moteur)
-    ENV_PATH.write_text(content, encoding="utf-8")
+    # newline="\n" : sous Windows, write_text écrirait du CRLF, que les scripts bash lisent mal (« ollama\r »)
+    ENV_PATH.write_text(content, encoding="utf-8", newline="\n")
 
     print(f"✅ {ENV_PATH} créé.")
     print("   UI Langfuse : http://localhost:3000")
