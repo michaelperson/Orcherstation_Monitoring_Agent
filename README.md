@@ -7,8 +7,11 @@ Formation BStorm : LangGraph + Langfuse, stack 100 % locale (vLLM sur le GPU de 
 ```bash
 git clone https://github.com/michaelperson/Orcherstation_Monitoring_Agent.git ~/helpdesk-ops
 cd ~/helpdesk-ops
+sudo bash infrastructure/preparer_poste.sh       # une fois par poste, par un administrateur (voir ci-dessous)
 bash infrastructure/installer_reseau.sh          # J1 matin : ≈ 28 Go (dont l'image vLLM, 9,2 Go), smoke test à la fin
 ```
+
+`preparer_poste.sh` installe le **NVIDIA Container Toolkit** (sans lui, Docker ne voit pas le GPU) et ajoute le compte au **groupe docker** : se déconnecter puis se reconnecter avant `installer_reseau.sh`. Pour préparer d'autres comptes : `sudo bash infrastructure/preparer_poste.sh <compte1> <compte2>`. Prérequis : pilote NVIDIA ≥ 580 et Docker Engine (pas le snap).
 
 Si le formateur distribue la clé USB des modèles : `bash infrastructure/installer_reseau.sh --cle /media/$USER/<NOM>/helpdesk-modeles` (≈ 10 Go de moins à télécharger).
 

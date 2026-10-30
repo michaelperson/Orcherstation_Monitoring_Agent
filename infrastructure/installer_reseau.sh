@@ -137,9 +137,22 @@ if [[ "${1:-}" == "--fond" ]]; then
 fi
 
 echo "== 1/5 Vérifications (moteur : $MOTEUR)"
-docker info >/dev/null 2>&1 || { echo "Docker inaccessible : utilisateur dans le groupe docker ?"; exit 1; }
+if ! docker info >/dev/null 2>&1; then
+  if getent group docker | cut -d: -f4 | tr ',' '\n' | grep -qx "$USER"; then
+    echo "❌ $USER est dans le groupe docker, mais pas cette session : fermer la session et se reconnecter (ou : newgrp docker)"
+  else
+    echo "❌ Docker inaccessible pour $USER : un administrateur lance « sudo bash infrastructure/preparer_poste.sh $USER », puis reconnexion"
+  fi
+  exit 1
+fi
 if command -v nvidia-smi >/dev/null; then
   nvidia-smi --query-gpu=name,memory.total,driver_version --format=csv,noheader
+  # Le GPU doit être visible DANS Docker (NVIDIA Container Toolkit), pas seulement sur l'hôte : sinon l'échec
+  # n'arrive qu'au démarrage de vLLM, après le téléchargement des images.
+  docker run --rm --gpus all ubuntu:24.04 nvidia-smi -L >/dev/null 2>&1 || {
+    echo "❌ Docker ne voit pas le GPU (NVIDIA Container Toolkit absent ou non configuré) : sudo bash infrastructure/preparer_poste.sh"
+    exit 1
+  }
   if [[ $MOTEUR == vllm ]]; then
     PILOTE=$(nvidia-smi --query-gpu=driver_version --format=csv,noheader | head -1 | cut -d. -f1)
     (( PILOTE >= 580 )) || { echo "❌ pilote NVIDIA $PILOTE < 580 : l'image vLLM (CUDA 13) ne démarrera pas. Plan B : LLM_BACKEND=ollama (README)"; exit 1; }

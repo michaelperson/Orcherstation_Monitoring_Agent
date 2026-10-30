@@ -11,7 +11,7 @@
 
 ## Pré-requis
 
-- Docker (Compose v2)
+- Docker Engine (Compose v2) ; en salle, le compte dans le groupe docker et le NVIDIA Container Toolkit : `sudo bash infrastructure/preparer_poste.sh` (voir « Salle de formation »)
 - **uv ≥ 0.12** : c'est le seul outil Python à installer, il gère lui-même Python 3.12.
   - Linux / macOS : `curl -LsSf https://astral.sh/uv/install.sh | sh`
   - Windows (PowerShell) : `powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"`
@@ -71,7 +71,7 @@ Langfuse met **2 à 3 minutes** à être prêt au premier démarrage (migrations
 
 GPU de la salle : **RTX PRO 4000 Blackwell, 24 Go**. Moteur : **vLLM v0.32.0** (`docker-compose.vllm.yml`), choisi le 27/10/2026.
 
-1. Installer le pilote NVIDIA (**≥ 580** : l'image vLLM est en CUDA 13) et le **NVIDIA Container Toolkit**, puis vérifier : `docker run --rm --gpus all ubuntu:24.04 nvidia-smi`. `installer_reseau.sh` refuse de continuer avec un pilote plus ancien.
+1. Installer le pilote NVIDIA (**≥ 580** : l'image vLLM est en CUDA 13), puis, une fois par poste et en administrateur : `sudo bash infrastructure/preparer_poste.sh [compte ...]`. Le script installe le **NVIDIA Container Toolkit** (dépôt NVIDIA, version 1.20.1-1 figée), configure le runtime Docker (`nvidia-ctk`), ajoute les comptes au **groupe docker** (par défaut celui qui lance `sudo`) et vérifie qu'un conteneur voit le GPU. Il est relançable. Les comptes ajoutés doivent **se déconnecter puis se reconnecter**. ⚠️ Le groupe docker équivaut à un accès root : à réserver aux postes de formation. `installer_reseau.sh` vérifie ces deux points dès son étape 1 (et refuse un pilote < 580), avant tout téléchargement.
 2. Toujours démarrer avec la surcharge : `docker compose -f docker-compose.yml -f docker-compose.vllm.yml up -d`. Ollama ne démarre pas avec ce fichier (profil `ollama`).
 3. **Un serveur vLLM par modèle**, chacun avec une part **fixe** de la VRAM réservée au démarrage :
 
