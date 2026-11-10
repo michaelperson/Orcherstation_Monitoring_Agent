@@ -1,0 +1,764 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Ressources pour continuer</title>
+<style>
+:root{--bg:#f7f6f2;--surface:#fff;--surface2:#f0eee8;--text:#1d1d1f;--muted:#5d5d63;--border:#dedbd2;--accent:#1f5fbf;
+--accent-soft:#e3ecfa;--code-bg:#1e1f24;--code-text:#e8e6e1}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141518;--surface:#1c1d21;--surface2:#24262b;--text:#ecebe8;
+--muted:#a3a3aa;--border:#33353b;--accent:#7aa7ff;--accent-soft:#1d2a44;--code-bg:#0f1013}}
+:root[data-theme="dark"]{--bg:#141518;--surface:#1c1d21;--surface2:#24262b;--text:#ecebe8;--muted:#a3a3aa;--border:#33353b;
+--accent:#7aa7ff;--accent-soft:#1d2a44;--code-bg:#0f1013}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.page{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:1300px;margin:0 auto}
+nav.toc{position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;overflow-x:hidden;padding:24px 14px;border-right:1px solid var(--border);font-size:.88rem}
+nav.toc ul{list-style:none;padding-left:12px;margin:0}nav.toc>ul{padding-left:0}
+nav.toc a{color:var(--text);text-decoration:none;display:block;padding:2px 6px;border-radius:6px}
+nav.toc a:hover{background:var(--surface2)}
+nav.toc .retour{display:block;margin-bottom:12px;color:var(--accent)}
+main{padding:32px 40px 80px;min-width:0}
+h1{font-size:2rem;line-height:1.2;margin:1.6em 0 .5em;padding-top:.6em;border-top:3px solid var(--accent)}
+h1:first-child{margin-top:0;border-top:0;padding-top:0}
+h2{font-size:1.4rem;margin:1.8em 0 .5em;line-height:1.3}h3{font-size:1.12rem;margin:1.4em 0 .4em}
+a{color:var(--accent)}
+code{font-family:ui-monospace,"Cascadia Code",Consolas,monospace;font-size:.9em}
+:not(pre)>code{background:var(--surface2);padding:.05em .35em;border-radius:4px}
+pre{background:var(--code-bg);color:var(--code-text);padding:14px 16px;border-radius:8px;overflow:auto;font-size:.84rem;line-height:1.5}
+pre.mermaid{background:var(--surface);color:var(--text);border:1px solid var(--border);text-align:center}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.92rem;display:block;overflow-x:auto}
+th,td{border:1px solid var(--border);padding:6px 10px;text-align:left;vertical-align:top}
+th{background:var(--surface2)}
+blockquote{margin:12px 0;padding:10px 16px;background:var(--accent-soft);border-left:4px solid var(--accent);border-radius:0 8px 8px 0}
+blockquote p{margin:.3em 0}
+details{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 16px;margin:12px 0}
+summary{cursor:pointer;font-weight:600}
+li{margin:3px 0}
+.theme{position:fixed;top:12px;right:14px;font:inherit;border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:8px;padding:4px 10px;cursor:pointer}
+@media (max-width:900px){.page{grid-template-columns:1fr}nav.toc{position:static;max-height:none;border-right:0;border-bottom:1px solid var(--border)}main{padding:20px 16px 60px}}
+@media print{nav.toc,.theme{display:none}.page{display:block}main{padding:0}h1{page-break-before:always;border-top:0}
+h1:first-child{page-break-before:avoid}pre{white-space:pre-wrap;word-break:break-word}details{border:0;padding:0}
+pre,blockquote,.mermaid{page-break-inside:avoid}body{background:#fff;color:#000;font-size:11pt}}
+</style></head><body><button class="theme" type="button" title="Clair / sombre">◐</button>
+<div class="page"><nav class="toc"><a class="retour" href="../00_COMMENCEZ_ICI.html">← Accueil du kit</a><div class="toc">
+<ul>
+<li><a href="#ressources-pour-continuer-apres-la-formation">Ressources pour continuer après la formation</a><ul>
+<li><a href="#par-ou-commencer-top-5">Par où commencer (top 5)</a></li>
+<li><a href="#1-documentation-officielle">1. Documentation officielle</a></li>
+<li><a href="#2-cours-gratuits-structures">2. Cours gratuits structurés</a></li>
+<li><a href="#3-tutoriels-pas-a-pas-officiels">3. Tutoriels pas à pas officiels</a></li>
+<li><a href="#4-exemples-de-code-et-depots-github-officiels">4. Exemples de code et dépôts GitHub officiels</a></li>
+<li><a href="#5-langfuse">5. Langfuse</a></li>
+<li><a href="#6-mcp-model-context-protocol">6. MCP (Model Context Protocol)</a></li>
+<li><a href="#7-rag-et-qdrant">7. RAG et Qdrant</a></li>
+<li><a href="#8-modeles-locaux-ollama-vllm">8. Modèles locaux (Ollama, vLLM)</a></li>
+<li><a href="#9-evaluation-et-securite">9. Évaluation et sécurité</a></li>
+<li><a href="#10-videos-et-ressources-en-francais">10. Vidéos et ressources en français</a></li>
+<li><a href="#11-communautes">11. Communautés</a></li>
+<li><a href="#mefiez-vous-des-tutos-depasses">Méfiez-vous des tutos dépassés</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav>
+<main><h1 id="ressources-pour-continuer-apres-la-formation">Ressources pour continuer après la formation</h1>
+<p>Cette liste rassemble des ressources officielles et à jour pour aller plus loin avec LangChain 1.x, LangGraph 1.x, Langfuse, MCP, Qdrant, Ollama, l'évaluation et la sécurité des agents.
+La plupart des contenus sont en anglais : la documentation officielle évolue vite et ses traductions suivent mal. Les ressources en français sont signalées.
+Chaque lien a été ouvert et contrôlé ; en cas de doute entre un tuto de blog et la doc officielle, croyez la doc officielle.</p>
+<h2 id="par-ou-commencer-top-5">Par où commencer (top 5)</h2>
+<table>
+<thead>
+<tr>
+<th>Ressource</th>
+<th>Niveau</th>
+<th>Langue</th>
+<th>Pourquoi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/langchain/quickstart">LangChain : Quickstart</a></td>
+<td>Débutant</td>
+<td>EN</td>
+<td>Le premier agent <code>create_agent</code> en quelques minutes, avec la syntaxe 1.x actuelle.</td>
+</tr>
+<tr>
+<td><a href="https://academy.langchain.com/courses/intro-to-langgraph">Introduction to LangGraph (LangChain Academy)</a></td>
+<td>Débutant à intermédiaire</td>
+<td>EN</td>
+<td>Cours gratuit, 55 leçons, environ 6 h de vidéo : état, mémoire, human-in-the-loop, déploiement.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/langgraph/thinking-in-graph-api">Thinking in the Graph API</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>La méthode officielle pour découper un problème en nœuds, état et arêtes avant d'écrire du code.</td>
+</tr>
+<tr>
+<td><a href="https://langfuse.com/integrations/frameworks/langchain">Langfuse : intégration LangChain / LangGraph</a></td>
+<td>Débutant</td>
+<td>EN</td>
+<td>Brancher le <code>CallbackHandler</code> pour tracer vos agents, y compris sur une instance auto-hébergée.</td>
+</tr>
+<tr>
+<td><a href="https://huggingface.co/learn/agents-course/fr/unit0/introduction">Cours Agents de Hugging Face (version française)</a></td>
+<td>Débutant à avancé</td>
+<td>FR</td>
+<td>Cours gratuit traduit en français, avec une unité LangGraph ; bon complément pour réviser les concepts dans sa langue.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="1-documentation-officielle">1. Documentation officielle</h2>
+<table>
+<thead>
+<tr>
+<th>Ressource</th>
+<th>Niveau</th>
+<th>Langue</th>
+<th>Pourquoi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/langchain/overview">LangChain overview</a></td>
+<td>Débutant</td>
+<td>EN</td>
+<td>Point d'entrée de la doc LangChain 1.x : agents, modèles, outils, middleware.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/langgraph/overview">LangGraph overview</a></td>
+<td>Débutant</td>
+<td>EN</td>
+<td>Point d'entrée de LangGraph 1.x : graphes, persistance, interruptions, streaming.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/releases/langchain-v1">What's new in LangChain v1</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Ce qui a changé en 1.0 (<code>create_agent</code>, middleware, contenu standard) ; utile pour lire du code ancien.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/migrate/langchain-v1">LangChain v1 migration guide</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Table de correspondance entre l'ancienne API et la nouvelle, pour moderniser un tuto 0.x.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/langgraph/graph-api">Graph API overview</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Référence conceptuelle sur <code>StateGraph</code>, reducers, <code>Command</code>, <code>Send</code>.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/langchain/middleware/overview">Middleware overview</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Le mécanisme 1.x pour ajouter résumé, garde-fous, HITL ou retries autour d'un agent.</td>
+</tr>
+<tr>
+<td><a href="https://reference.langchain.com/python/langchain/">Référence API Python</a></td>
+<td>Avancé</td>
+<td>EN</td>
+<td>Signatures exactes des classes et fonctions du paquet <code>langchain</code>.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/use-these-docs">Use docs programmatically (llms.txt et serveur MCP de doc)</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Explique comment brancher votre assistant IA sur la doc : index <a href="https://docs.langchain.com/llms.txt"><code>llms.txt</code></a> et serveur MCP <code>https://docs.langchain.com/mcp</code>.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-cours-gratuits-structures">2. Cours gratuits structurés</h2>
+<table>
+<thead>
+<tr>
+<th>Ressource</th>
+<th>Niveau</th>
+<th>Langue</th>
+<th>Pourquoi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://academy.langchain.com/courses/foundation-introduction-to-langchain-python">Introduction to LangChain - Python (Academy)</a></td>
+<td>Débutant</td>
+<td>EN</td>
+<td>Construire des agents avec les architectures prêtes à l'emploi de LangChain 1.x ; gratuit.</td>
+</tr>
+<tr>
+<td><a href="https://academy.langchain.com/courses/intro-to-langgraph">Introduction to LangGraph - Python (Academy)</a></td>
+<td>Débutant à intermédiaire</td>
+<td>EN</td>
+<td>Le cours de référence sur LangGraph, gratuit, 55 leçons.</td>
+</tr>
+<tr>
+<td><a href="https://academy.langchain.com/courses/foundation-introduction-to-deepagents">Introduction to Deep Agents (Academy)</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Agents longs avec le harnais Deep Agents (planification, système de fichiers, sous-agents) ; gratuit.</td>
+</tr>
+<tr>
+<td><a href="https://academy.langchain.com/courses/ambient-agents">Project: Ambient Agents with LangGraph (Academy)</a></td>
+<td>Avancé</td>
+<td>EN</td>
+<td>Projet complet d'assistant e-mail : mémoire, human-in-the-loop, évaluation, déploiement.</td>
+</tr>
+<tr>
+<td><a href="https://academy.langchain.com/courses/deep-agents-with-langgraph">Project: Deep Agents (Academy)</a></td>
+<td>Avancé</td>
+<td>EN</td>
+<td>Reconstruire pas à pas un agent profond pour comprendre ce que fait le harnais.</td>
+</tr>
+<tr>
+<td><a href="https://www.deeplearning.ai/short-courses/ai-agents-in-langgraph/">AI Agents in LangGraph (DeepLearning.AI)</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>1 h 47, par Harrison Chase : agent écrit à la main puis refait en LangGraph (page mise à jour le 04/11/2026). Certaines API montrées ont été renommées depuis : vérifier dans la doc.</td>
+</tr>
+<tr>
+<td><a href="https://www.deeplearning.ai/short-courses/long-term-agentic-memory-with-langgraph/">Long-Term Agentic Memory With LangGraph (DeepLearning.AI)</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Mémoire sémantique, épisodique et procédurale d'un agent.</td>
+</tr>
+<tr>
+<td><a href="https://huggingface.co/learn/agents-course/fr/unit0/introduction">Cours Agents de Hugging Face (FR)</a></td>
+<td>Débutant à avancé</td>
+<td>FR</td>
+<td>Gratuit, traduit en français, certificat possible ; couvre smolagents, LlamaIndex et LangGraph.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3-tutoriels-pas-a-pas-officiels">3. Tutoriels pas à pas officiels</h2>
+<table>
+<thead>
+<tr>
+<th>Ressource</th>
+<th>Niveau</th>
+<th>Langue</th>
+<th>Pourquoi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/langgraph/quickstart">LangGraph Quickstart</a></td>
+<td>Débutant</td>
+<td>EN</td>
+<td>Un agent construit à la main avec la Graph API, puis avec la Functional API.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/langgraph/workflows-agents">Workflows and agents</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Les motifs classiques (chaînage, routage, parallélisation, orchestrateur-travailleurs, évaluateur-optimiseur) en LangGraph.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/langgraph/agentic-rag">Build a custom RAG agent with LangGraph</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>RAG agentique : décider de chercher, noter les documents, réécrire la question.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/langchain/knowledge-base">Build a semantic search engine</a></td>
+<td>Débutant</td>
+<td>EN</td>
+<td>Chargement, découpage, embeddings et vector store : les briques du RAG.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/langchain/human-in-the-loop">Human-in-the-loop</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Valider, modifier ou rejeter un appel d'outil avant exécution, avec le middleware HITL.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/langgraph/interrupts">Interrupts</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td><code>interrupt()</code> et la reprise avec <code>Command(resume=...)</code> dans un graphe.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/langgraph/persistence">Persistence</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Checkpointers, threads, historique d'état, et <a href="https://docs.langchain.com/oss/python/langgraph/use-time-travel">time-travel</a> pour rejouer un état passé.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/langchain/structured-output">Structured output</a></td>
+<td>Débutant</td>
+<td>EN</td>
+<td><code>response_format</code> avec Pydantic : stratégies outil ou natif.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/langchain/multi-agent">Multi-agent</a> et <a href="https://docs.langchain.com/oss/python/langchain/multi-agent/subagents-personal-assistant">tutoriel sous-agents</a></td>
+<td>Intermédiaire à avancé</td>
+<td>EN</td>
+<td>Superviseur, sous-agents, transferts : quand et comment découper en plusieurs agents.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4-exemples-de-code-et-depots-github-officiels">4. Exemples de code et dépôts GitHub officiels</h2>
+<table>
+<thead>
+<tr>
+<th>Ressource</th>
+<th>Niveau</th>
+<th>Langue</th>
+<th>Pourquoi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/langchain-ai/langgraph">langchain-ai/langgraph</a></td>
+<td>Avancé</td>
+<td>EN</td>
+<td>Code source, issues et notes de version de LangGraph. Le dossier <code>examples/</code> est archivé et n'est plus mis à jour : préférer la doc.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/langchain-ai/langchain">langchain-ai/langchain</a></td>
+<td>Avancé</td>
+<td>EN</td>
+<td>Code source de LangChain et de ses intégrations partenaires (dont <code>langchain-ollama</code>, <code>langchain-qdrant</code>).</td>
+</tr>
+<tr>
+<td><a href="https://github.com/langchain-ai/langchain-academy">langchain-ai/langchain-academy</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Les notebooks du cours Introduction to LangGraph, module par module, avec graphes pour Studio.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/langchain-ai/deepagents">langchain-ai/deepagents</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Le harnais Deep Agents ; lire son code montre un agent de production bien structuré.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/langchain-ai/agents-from-scratch">langchain-ai/agents-from-scratch</a></td>
+<td>Avancé</td>
+<td>EN</td>
+<td>Assistant e-mail avec human-in-the-loop, mémoire et évaluation (support du cours Ambient Agents).</td>
+</tr>
+<tr>
+<td><a href="https://github.com/langchain-ai/open_deep_research">langchain-ai/open_deep_research</a></td>
+<td>Avancé</td>
+<td>EN</td>
+<td>Agent de recherche multi-agents complet et configurable.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/langchain-ai/react-agent">langchain-ai/react-agent</a> et <a href="https://github.com/langchain-ai/new-langgraph-project">new-langgraph-project</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Gabarits de projet LangGraph prêts pour <code>langgraph dev</code> et Studio.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="5-langfuse">5. Langfuse</h2>
+<p>Nota : la formation utilise le SDK Python v4. Au 10/11/2026, la doc Langfuse présente un SDK Python v5 (qui demande un serveur Langfuse v4 ou plus) ; consultez le guide de migration avant de monter de version.</p>
+<table>
+<thead>
+<tr>
+<th>Ressource</th>
+<th>Niveau</th>
+<th>Langue</th>
+<th>Pourquoi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://langfuse.com/docs">Documentation Langfuse</a></td>
+<td>Débutant</td>
+<td>EN</td>
+<td>Point d'entrée : traces, prompts, évaluation, métriques.</td>
+</tr>
+<tr>
+<td><a href="https://langfuse.com/integrations/frameworks/langchain">Intégration LangChain / LangGraph</a></td>
+<td>Débutant</td>
+<td>EN</td>
+<td>Tracer un agent LangChain ou un graphe LangGraph avec le <code>CallbackHandler</code>.</td>
+</tr>
+<tr>
+<td><a href="https://langfuse.com/docs/observability/sdk/overview">SDK Python et JS/TS</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>SDK basé sur OpenTelemetry : <code>@observe</code>, spans, attributs. Guides de migration <a href="https://langfuse.com/docs/observability/sdk/upgrade-path/python-v3-to-v4">v3 vers v4</a> et <a href="https://langfuse.com/docs/observability/sdk/upgrade-path/python-v4-to-v5">v4 vers v5</a>.</td>
+</tr>
+<tr>
+<td><a href="https://langfuse.com/self-hosting">Self-hosting</a> et <a href="https://langfuse.com/self-hosting/deployment/docker-compose">déploiement Docker Compose</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Héberger Langfuse soi-même, comme dans la formation.</td>
+</tr>
+<tr>
+<td><a href="https://langfuse.com/docs/evaluation/overview">Evaluation overview</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Vue d'ensemble : évaluation en ligne et hors ligne, scores, annotations.</td>
+</tr>
+<tr>
+<td><a href="https://langfuse.com/docs/evaluation/experiments/datasets">Datasets</a> et <a href="https://langfuse.com/docs/evaluation/experiments/experiments-via-sdk">Experiments via SDK</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Constituer un jeu de test et rejouer l'agent dessus pour comparer des versions.</td>
+</tr>
+<tr>
+<td><a href="https://langfuse.com/docs/evaluation/evaluation-methods/llm-as-a-judge">LLM-as-a-Judge</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Faire noter les traces par un modèle juge, avec ses limites.</td>
+</tr>
+<tr>
+<td><a href="https://langfuse.com/guides/cookbook/example_langgraph_agents">Cookbook : tracer et évaluer des agents LangGraph</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Notebook complet de bout en bout ; d'autres recettes dans les <a href="https://langfuse.com/guides">guides</a>. Le <a href="https://langfuse.com/docs/docs-mcp">serveur MCP de la doc</a> (<code>https://langfuse.com/api/mcp</code>) permet d'interroger la doc depuis son assistant IA.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="6-mcp-model-context-protocol">6. MCP (Model Context Protocol)</h2>
+<table>
+<thead>
+<tr>
+<th>Ressource</th>
+<th>Niveau</th>
+<th>Langue</th>
+<th>Pourquoi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://modelcontextprotocol.io/docs/getting-started/intro">Qu'est-ce que MCP ? (site officiel)</a></td>
+<td>Débutant</td>
+<td>EN</td>
+<td>Introduction officielle et <a href="https://modelcontextprotocol.io/docs/learn/architecture">architecture</a> hôte, client, serveur.</td>
+</tr>
+<tr>
+<td><a href="https://modelcontextprotocol.io/specification/2026-07-28">Spécification MCP (version 2026-07-28)</a></td>
+<td>Avancé</td>
+<td>EN</td>
+<td>Le texte normatif : outils, ressources, prompts, transports, autorisation. Version la plus récente au 10/11/2026.</td>
+</tr>
+<tr>
+<td><a href="https://modelcontextprotocol.io/docs/develop/build-server">Build an MCP server</a></td>
+<td>Débutant</td>
+<td>EN</td>
+<td>Tutoriel officiel pour écrire son premier serveur.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/modelcontextprotocol/python-sdk">SDK Python officiel</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Le SDK de référence pour serveurs et clients MCP en Python.</td>
+</tr>
+<tr>
+<td><a href="https://gofastmcp.com/">FastMCP</a> (<a href="https://github.com/PrefectHQ/fastmcp">dépôt</a>)</td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Framework Python le plus utilisé pour écrire serveurs et clients MCP rapidement.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/langchain-ai/langchain-mcp-adapters">langchain-mcp-adapters</a> et <a href="https://docs.langchain.com/oss/python/langchain/mcp">doc LangChain MCP</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Charger les outils d'un serveur MCP dans un agent LangChain / LangGraph.</td>
+</tr>
+<tr>
+<td><a href="https://registry.modelcontextprotocol.io/">Registre officiel des serveurs MCP</a> et <a href="https://github.com/modelcontextprotocol/servers">serveurs de référence</a></td>
+<td>Débutant</td>
+<td>EN</td>
+<td>Trouver des serveurs existants et lire des implémentations exemplaires.</td>
+</tr>
+<tr>
+<td><a href="https://modelcontextprotocol.io/docs/tutorials/security/security_best_practices">Security Best Practices (MCP)</a></td>
+<td>Avancé</td>
+<td>EN</td>
+<td>Attaques propres à MCP (confused deputy, passage de jeton, SSRF, détournement de session) et parades.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="7-rag-et-qdrant">7. RAG et Qdrant</h2>
+<table>
+<thead>
+<tr>
+<th>Ressource</th>
+<th>Niveau</th>
+<th>Langue</th>
+<th>Pourquoi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://qdrant.tech/documentation/">Documentation Qdrant</a> et <a href="https://qdrant.tech/documentation/quickstart/">Local Quickstart</a></td>
+<td>Débutant</td>
+<td>EN</td>
+<td>Démarrer Qdrant en local avec Docker et faire ses premières requêtes.</td>
+</tr>
+<tr>
+<td><a href="https://qdrant.tech/documentation/search/hybrid-queries/">Hybrid Queries</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>API Query, prefetch, fusion RRF/DBSF : la base de la recherche hybride dense + creuse.</td>
+</tr>
+<tr>
+<td><a href="https://qdrant.tech/documentation/search-tuning/hybrid-search/">Hybrid Search in Qdrant</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Pourquoi et comment combiner recherche lexicale et sémantique, avec reranking.</td>
+</tr>
+<tr>
+<td><a href="https://qdrant.tech/documentation/tutorials-develop/hybrid-search-fastembed/">Build a Hybrid Search API</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Tutoriel complet avec FastEmbed.</td>
+</tr>
+<tr>
+<td><a href="https://qdrant.tech/course/essentials/">Qdrant Essentials Course</a></td>
+<td>Débutant à intermédiaire</td>
+<td>EN</td>
+<td>Cours gratuit de Qdrant sur la recherche vectorielle.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/integrations/vectorstores/qdrant">Intégration Qdrant (doc LangChain)</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td><code>QdrantVectorStore</code> : modes dense, creux et hybride côté LangChain.</td>
+</tr>
+<tr>
+<td><a href="https://qdrant.tech/documentation/frameworks/langchain/">LangChain (doc Qdrant)</a></td>
+<td>Débutant</td>
+<td>EN</td>
+<td>Le même sujet vu par Qdrant.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="8-modeles-locaux-ollama-vllm">8. Modèles locaux (Ollama, vLLM)</h2>
+<table>
+<thead>
+<tr>
+<th>Ressource</th>
+<th>Niveau</th>
+<th>Langue</th>
+<th>Pourquoi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://docs.ollama.com/">Documentation Ollama</a> et <a href="https://docs.ollama.com/api">API</a></td>
+<td>Débutant</td>
+<td>EN</td>
+<td>Installer, lancer et interroger des modèles en local.</td>
+</tr>
+<tr>
+<td><a href="https://docs.ollama.com/capabilities/tool-calling">Ollama : Tool calling</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Indispensable pour un agent : quels modèles appellent des outils et comment.</td>
+</tr>
+<tr>
+<td><a href="https://docs.ollama.com/capabilities/structured-outputs">Ollama : Structured Outputs</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Sortie contrainte par schéma JSON ; utile pour comprendre <code>response_format</code> en local.</td>
+</tr>
+<tr>
+<td><a href="https://ollama.com/library">Bibliothèque de modèles Ollama</a></td>
+<td>Débutant</td>
+<td>EN</td>
+<td>Choisir un modèle (taille, capacités <code>tools</code>, <code>thinking</code>, <code>vision</code>).</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/integrations/chat/ollama">ChatOllama (doc LangChain)</a> et <a href="https://docs.langchain.com/oss/python/integrations/providers/ollama">intégrations Ollama</a></td>
+<td>Débutant</td>
+<td>EN</td>
+<td>Brancher Ollama dans LangChain : chat, embeddings, paramètres.</td>
+</tr>
+<tr>
+<td><a href="https://docs.vllm.ai/en/latest/">Documentation vLLM</a> et <a href="https://docs.vllm.ai/en/latest/features/tool_calling/">Tool Calling</a></td>
+<td>Avancé</td>
+<td>EN</td>
+<td>Servir un modèle sur GPU avec une API compatible OpenAI ; les parseurs d'appels d'outils.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/integrations/chat/vllm">vLLM (doc LangChain)</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Brancher un serveur vLLM dans LangChain.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="9-evaluation-et-securite">9. Évaluation et sécurité</h2>
+<table>
+<thead>
+<tr>
+<th>Ressource</th>
+<th>Niveau</th>
+<th>Langue</th>
+<th>Pourquoi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/">OWASP Top 10 for Agentic Applications for 2026</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Les 10 risques propres aux agents (ASI01 à ASI10 : détournement d'objectif, abus d'outils, agents voyous...), publié le 09/12/2025.</td>
+</tr>
+<tr>
+<td><a href="https://genai.owasp.org/llm-top-10/">OWASP Top 10 for LLM Applications 2025</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Les risques de base hérités par tout agent, dont <a href="https://genai.owasp.org/llmrisk/llm01-prompt-injection/">LLM01 Prompt Injection</a>.</td>
+</tr>
+<tr>
+<td><a href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/">Agentic AI : Threats and Mitigations (OWASP)</a></td>
+<td>Avancé</td>
+<td>EN</td>
+<td>Modèle de menaces détaillé des architectures agentiques.</td>
+</tr>
+<tr>
+<td><a href="https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html">OWASP AI Agent Security Cheat Sheet</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Liste de contrôles concrets : moindre privilège des outils, validation, HITL, journalisation.</td>
+</tr>
+<tr>
+<td><a href="https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html">OWASP LLM Prompt Injection Prevention Cheat Sheet</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Techniques de défense contre l'injection directe et indirecte (documents, pages web, e-mails).</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/langchain/guardrails">Guardrails (doc LangChain)</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Garde-fous par middleware : PII, filtrage d'entrée et de sortie, validation humaine.</td>
+</tr>
+<tr>
+<td><a href="https://www.deeplearning.ai/short-courses/evaluating-ai-agents/">Evaluating AI Agents (DeepLearning.AI, avec Arize)</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Évaluer routeur, compétences et trajectoire ; LLM-as-a-judge (page mise à jour le 04/11/2026).</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/langsmith/evaluation-concepts">Evaluation concepts</a>, <a href="https://github.com/langchain-ai/agentevals">agentevals</a> et <a href="https://github.com/langchain-ai/openevals">openevals</a></td>
+<td>Intermédiaire à avancé</td>
+<td>EN</td>
+<td>Vocabulaire de l'évaluation (hors ligne, en ligne, trajectoire) et évaluateurs prêts à l'emploi, utilisables aussi hors LangSmith. Voir aussi <a href="https://docs.langchain.com/oss/python/langchain/test">Test</a> pour les tests d'agents.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="10-videos-et-ressources-en-francais">10. Vidéos et ressources en français</h2>
+<table>
+<thead>
+<tr>
+<th>Ressource</th>
+<th>Niveau</th>
+<th>Langue</th>
+<th>Pourquoi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://www.youtube.com/@LangChain">Chaîne YouTube LangChain</a></td>
+<td>Tous niveaux</td>
+<td>EN</td>
+<td>Annonces, tutoriels et séries officielles ; regardez la date : les vidéos d'avant fin 2025 montrent souvent l'API 0.x.</td>
+</tr>
+<tr>
+<td><a href="https://www.youtube.com/@langfuse">Chaîne YouTube Langfuse</a></td>
+<td>Débutant à intermédiaire</td>
+<td>EN</td>
+<td>Démos officielles de traçage, prompts et évaluation.</td>
+</tr>
+<tr>
+<td><a href="https://www.deeplearning.ai/short-courses/mcp-build-rich-context-ai-apps-with-anthropic/">MCP: Build Rich-Context AI Apps with Anthropic (DeepLearning.AI)</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Cours vidéo de 1 h 58 : client, serveur et déploiement MCP (mis à jour le 13/08/2026).</td>
+</tr>
+<tr>
+<td><a href="https://huggingface.co/learn/mcp-course/unit0/introduction">Cours MCP de Hugging Face</a></td>
+<td>Débutant à intermédiaire</td>
+<td>EN</td>
+<td>Cours gratuit sur MCP, de la théorie à la construction d'applications.</td>
+</tr>
+<tr>
+<td><a href="https://huggingface.co/learn/agents-course/fr/unit0/introduction">Cours Agents de Hugging Face (FR)</a></td>
+<td>Débutant à avancé</td>
+<td>FR</td>
+<td>La ressource sérieuse et gratuite la plus complète en français sur les agents, avec une partie LangGraph.</td>
+</tr>
+</tbody>
+</table>
+<p>Nous n'avons pas trouvé de cours vidéo en français, sérieux et à jour sur LangChain 1.x : les tutos francophones repérés mélangeaient encore des versions 0.3. Pour le français, combinez le cours Hugging Face et la traduction automatique de la doc officielle.</p>
+<h2 id="11-communautes">11. Communautés</h2>
+<table>
+<thead>
+<tr>
+<th>Ressource</th>
+<th>Niveau</th>
+<th>Langue</th>
+<th>Pourquoi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://forum.langchain.com/">Forum LangChain</a></td>
+<td>Tous niveaux</td>
+<td>EN</td>
+<td>Le lieu officiel pour poser ses questions LangChain / LangGraph, suivi par l'équipe.</td>
+</tr>
+<tr>
+<td><a href="https://www.langchain.com/join-community">Communauté Slack LangChain</a></td>
+<td>Tous niveaux</td>
+<td>EN</td>
+<td>Échanges entre développeurs et annonces.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/orgs/langfuse/discussions">GitHub Discussions Langfuse</a></td>
+<td>Tous niveaux</td>
+<td>EN</td>
+<td>Questions, demandes de fonctionnalités, entraide, notamment sur l'auto-hébergement.</td>
+</tr>
+<tr>
+<td><a href="https://langfuse.com/discord">Discord Langfuse</a></td>
+<td>Tous niveaux</td>
+<td>EN</td>
+<td>Aide rapide de la communauté et de l'équipe.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/langfuse/langfuse">Dépôt GitHub Langfuse</a></td>
+<td>Intermédiaire</td>
+<td>EN</td>
+<td>Issues et notes de version : à surveiller avant toute mise à jour de l'instance.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="mefiez-vous-des-tutos-depasses">Méfiez-vous des tutos dépassés</h2>
+<p>Un tuto LangChain 0.x se reconnaît à ces signes :</p>
+<ul>
+<li><strong><code>initialize_agent</code>, <code>AgentExecutor</code>, <code>AgentType.ZERO_SHOT_REACT_DESCRIPTION</code></strong> : remplacés par <code>create_agent</code> (paquet <code>langchain</code>, version 1.x).</li>
+<li><strong><code>LLMChain</code>, <code>SequentialChain</code>, <code>RetrievalQA</code>, <code>ConversationalRetrievalChain</code></strong> : chaînes héritées, déplacées dans <code>langchain-classic</code> ; aujourd'hui on écrit un agent, un graphe ou une composition LCEL.</li>
+<li><strong><code>ConversationBufferMemory</code> et les autres classes <code>memory</code></strong> : remplacées par les checkpointers LangGraph et un <code>thread_id</code>.</li>
+<li><strong><code>from langchain.llms import ...</code>, <code>from langchain.chat_models import ChatOpenAI</code>, <code>from langchain.vectorstores import ...</code></strong> : les intégrations vivent désormais dans des paquets dédiés (<code>langchain-ollama</code>, <code>langchain-qdrant</code>, <code>langchain-openai</code>...).</li>
+<li><strong><code>from langgraph.prebuilt import create_react_agent</code></strong> : encore présent pour compatibilité, mais le point d'entrée recommandé est <code>from langchain.agents import create_agent</code>.</li>
+<li><strong><code>.run()</code>, <code>.predict()</code>, <code>chain(...)</code> appelés directement</strong> : en 1.x on utilise <code>.invoke()</code>, <code>.stream()</code>, <code>.batch()</code>.</li>
+<li><strong><code>pip install langchain==0.x</code> ou <code>langchain-core&lt;1</code></strong> dans les prérequis, ou des liens vers <code>python.langchain.com/docs</code> ou <code>langchain-ai.github.io/langgraph</code> : documentation ancienne, désormais regroupée sur <code>docs.langchain.com</code>.</li>
+<li><strong>Langfuse : <code>from langfuse.callback import CallbackHandler</code></strong> ou <code>langfuse.decorators</code> : syntaxe du SDK v2 ; depuis la v3, c'est <code>from langfuse.langchain import CallbackHandler</code> et <code>from langfuse import observe</code>.</li>
+<li><strong>Une date antérieure à fin 2025</strong> sans mention de LangChain 1.0 : vérifiez chaque import dans le <a href="https://docs.langchain.com/oss/python/migrate/langchain-v1">guide de migration</a>.</li>
+</ul>
+<hr />
+<p>Liens vérifiés le 10/11/2026.</p></main></div>
+<script src="../_assets/mermaid.min.js"></script>
+<script>
+const racine = document.documentElement;
+const sombre = () => racine.dataset.theme ? racine.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+try { const t = localStorage.getItem("kit-theme"); if (t) racine.dataset.theme = t; } catch (e) {}
+if (location.search.includes("print")) racine.dataset.theme = "light";
+document.querySelector(".theme").addEventListener("click", () => {
+  racine.dataset.theme = sombre() ? "light" : "dark";
+  try { localStorage.setItem("kit-theme", racine.dataset.theme); } catch (e) {}
+  location.reload();
+});
+if (location.search.includes("print")) document.querySelectorAll("details").forEach(d => d.open = true);
+window.addEventListener("beforeprint", () => document.querySelectorAll("details").forEach(d => d.open = true));
+if (window.mermaid) { mermaid.initialize({ startOnLoad: true, theme: sombre() ? "dark" : "default", securityLevel: "strict" }); }
+</script>
+</body></html>

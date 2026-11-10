@@ -1,0 +1,586 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Méthode IA par étapes</title>
+<style>
+:root{--bg:#f7f6f2;--surface:#fff;--surface2:#f0eee8;--text:#1d1d1f;--muted:#5d5d63;--border:#dedbd2;--accent:#1f5fbf;
+--accent-soft:#e3ecfa;--code-bg:#1e1f24;--code-text:#e8e6e1}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141518;--surface:#1c1d21;--surface2:#24262b;--text:#ecebe8;
+--muted:#a3a3aa;--border:#33353b;--accent:#7aa7ff;--accent-soft:#1d2a44;--code-bg:#0f1013}}
+:root[data-theme="dark"]{--bg:#141518;--surface:#1c1d21;--surface2:#24262b;--text:#ecebe8;--muted:#a3a3aa;--border:#33353b;
+--accent:#7aa7ff;--accent-soft:#1d2a44;--code-bg:#0f1013}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.page{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:1300px;margin:0 auto}
+nav.toc{position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;overflow-x:hidden;padding:24px 14px;border-right:1px solid var(--border);font-size:.88rem}
+nav.toc ul{list-style:none;padding-left:12px;margin:0}nav.toc>ul{padding-left:0}
+nav.toc a{color:var(--text);text-decoration:none;display:block;padding:2px 6px;border-radius:6px}
+nav.toc a:hover{background:var(--surface2)}
+nav.toc .retour{display:block;margin-bottom:12px;color:var(--accent)}
+main{padding:32px 40px 80px;min-width:0}
+h1{font-size:2rem;line-height:1.2;margin:1.6em 0 .5em;padding-top:.6em;border-top:3px solid var(--accent)}
+h1:first-child{margin-top:0;border-top:0;padding-top:0}
+h2{font-size:1.4rem;margin:1.8em 0 .5em;line-height:1.3}h3{font-size:1.12rem;margin:1.4em 0 .4em}
+a{color:var(--accent)}
+code{font-family:ui-monospace,"Cascadia Code",Consolas,monospace;font-size:.9em}
+:not(pre)>code{background:var(--surface2);padding:.05em .35em;border-radius:4px}
+pre{background:var(--code-bg);color:var(--code-text);padding:14px 16px;border-radius:8px;overflow:auto;font-size:.84rem;line-height:1.5}
+pre.mermaid{background:var(--surface);color:var(--text);border:1px solid var(--border);text-align:center}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.92rem;display:block;overflow-x:auto}
+th,td{border:1px solid var(--border);padding:6px 10px;text-align:left;vertical-align:top}
+th{background:var(--surface2)}
+blockquote{margin:12px 0;padding:10px 16px;background:var(--accent-soft);border-left:4px solid var(--accent);border-radius:0 8px 8px 0}
+blockquote p{margin:.3em 0}
+details{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 16px;margin:12px 0}
+summary{cursor:pointer;font-weight:600}
+li{margin:3px 0}
+.theme{position:fixed;top:12px;right:14px;font:inherit;border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:8px;padding:4px 10px;cursor:pointer}
+@media (max-width:900px){.page{grid-template-columns:1fr}nav.toc{position:static;max-height:none;border-right:0;border-bottom:1px solid var(--border)}main{padding:20px 16px 60px}}
+@media print{nav.toc,.theme{display:none}.page{display:block}main{padding:0}h1{page-break-before:always;border-top:0}
+h1:first-child{page-break-before:avoid}pre{white-space:pre-wrap;word-break:break-word}details{border:0;padding:0}
+pre,blockquote,.mermaid{page-break-inside:avoid}body{background:#fff;color:#000;font-size:11pt}}
+</style></head><body><button class="theme" type="button" title="Clair / sombre">◐</button>
+<div class="page"><nav class="toc"><a class="retour" href="../00_COMMENCEZ_ICI.html">← Accueil du kit</a><div class="toc">
+<ul>
+<li><a href="#construire-votre-orchestration-avec-votre-assistant-ia">Construire votre orchestration avec votre assistant IA</a><ul>
+<li><a href="#le-principe-lia-code-vite-donc-elle-se-trompe-vite">Le principe : l'IA code vite, donc elle se trompe vite</a></li>
+<li><a href="#1-definir-votre-projet-30-minutes-sans-ia-ou-presque">1. Définir votre projet (30 minutes, sans IA ou presque)</a></li>
+<li><a href="#2-configurer-votre-ia">2. Configurer votre IA</a></li>
+<li><a href="#3-les-etapes-et-les-choix-a-chaque-etape">3. Les étapes, et les choix à chaque étape</a></li>
+<li><a href="#4-relire-ce-que-lia-propose-la-grille">4. Relire ce que l'IA propose : la grille</a></li>
+<li><a href="#5-quand-lia-tourne-en-rond">5. Quand l'IA tourne en rond</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav>
+<main><h1 id="construire-votre-orchestration-avec-votre-assistant-ia">Construire votre orchestration avec votre assistant IA</h1>
+<p>Ce guide vous aide à reproduire, sur <strong>votre</strong> projet, ce que HelpDesk-Ops a construit pendant la formation :
+un agent LangChain, orchestré par un graphe LangGraph, observé et évalué dans Langfuse. Le code, votre
+assistant IA l'écrira (Claude Code, GitHub Copilot, Cursor, Codex, Gemini CLI…). <strong>Les décisions, c'est vous.</strong>
+Ce guide vous donne les décisions à prendre, dans l'ordre, avec un choix recommandé et sa raison.</p>
+<p>Trois fichiers :</p>
+<table>
+<thead>
+<tr>
+<th>Fichier</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ce guide</td>
+<td>la méthode, étape par étape</td>
+</tr>
+<tr>
+<td><a href="modeles/PROJET.md"><code>modele_PROJET.md</code></a></td>
+<td>la fiche de <strong>votre</strong> projet, à remplir avant d'écrire une ligne de code</td>
+</tr>
+<tr>
+<td><a href="modeles/AGENTS.md"><code>modele_AGENTS.md</code></a></td>
+<td>les règles que votre IA doit suivre : versions, API à jour, interdits, méthode</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="le-principe-lia-code-vite-donc-elle-se-trompe-vite">Le principe : l'IA code vite, donc elle se trompe vite</h2>
+<p>Un assistant IA connaît LangChain tel qu'il était <strong>pendant son entraînement</strong>. Or LangChain 1.x, LangGraph 1.x
+et le SDK Langfuse v4 ont beaucoup changé. Sans consignes, il produira du code plausible et dépassé
+(<code>initialize_agent</code>, <code>LLMChain</code>, <code>from langfuse.decorators import …</code>). Trois réflexes :</p>
+<ol>
+<li><strong>Lui donner le contexte</strong> : la fiche projet, les règles, la documentation à jour (section 2).</li>
+<li><strong>Avancer par petites étapes vérifiables</strong>, dans l'ordre de la construction HelpDesk-Ops (section 3). Une étape =
+   un fichier qui tourne, un dessin du graphe, une trace Langfuse.</li>
+<li><strong>Lui faire proposer un plan avant le code</strong>, et relire ce plan avec la grille de la section 4.</li>
+</ol>
+<hr />
+<h2 id="1-definir-votre-projet-30-minutes-sans-ia-ou-presque">1. Définir votre projet (30 minutes, sans IA ou presque)</h2>
+<p>Copiez <code>modele_PROJET.md</code> à la racine de votre projet sous le nom <code>PROJET.md</code>, et remplissez-le. Vous pouvez
+demander à l'IA de <strong>vous interviewer</strong> pour le remplir (prompt en fin de section), mais les réponses sont les
+vôtres.</p>
+<p>Les questions qui décident de l'architecture :</p>
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>Pourquoi elle compte</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Quelle <strong>décision</strong> le système prend-il ? (trier, répondre, router, rédiger…)</td>
+<td>c'est elle qu'on va structurer et mesurer</td>
+</tr>
+<tr>
+<td>Quelles <strong>actions</strong> touchent le monde réel ? (créer un ticket, envoyer un mail, payer)</td>
+<td>chacune demandera peut-être une validation humaine</td>
+</tr>
+<tr>
+<td>Quelles étapes doivent <strong>toujours</strong> se produire, dans quel ordre ?</td>
+<td>ce qui est fixe va dans le graphe ; ce qui varie, l'agent le choisit</td>
+</tr>
+<tr>
+<td>Quelles <strong>données</strong> sont sensibles ? (personnelles, confidentielles)</td>
+<td>décide du modèle (local ou non) et de ce qu'on trace</td>
+</tr>
+<tr>
+<td>À quoi voit-on que <strong>ça marche</strong> ? Un chiffre</td>
+<td>sans critère mesurable, impossible de comparer deux versions</td>
+</tr>
+<tr>
+<td><strong>10 à 20 cas réels</strong> avec la réponse attendue</td>
+<td>votre futur dataset d'évaluation, écrit <strong>avant</strong> le code</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>✅ <strong>Choix recommandé : écrire les cas de test d'abord.</strong> Raison : c'est ce que l'on a vu en J4. Sans dataset,
+chaque changement de prompt ou de modèle se juge « à l'œil », et l'œil se trompe. Avec 20 cas, une experiment
+Langfuse tranche en quelques minutes (défi B : catégorie juste 50 % → 100 %, mesuré, pas ressenti).</p>
+</blockquote>
+<p>Prompt pour l'interview :</p>
+<pre><code class="language-text">Lis PROJET.md. Pose-moi une à une les questions nécessaires pour le compléter,
+en commençant par la décision que le système doit prendre. N'écris aucun code.
+Quand c'est fini, réécris PROJET.md avec mes réponses et liste ce qui reste flou.
+</code></pre>
+<hr />
+<h2 id="2-configurer-votre-ia">2. Configurer votre IA</h2>
+<h3 id="21-le-fichier-de-regles-agentsmd">2.1 Le fichier de règles : <code>AGENTS.md</code></h3>
+<p>Copiez <code>modele_AGENTS.md</code> à la racine de votre projet sous le nom <code>AGENTS.md</code>, et adaptez la section « Projet ».</p>
+<blockquote>
+<p>✅ <strong>Choix recommandé : <code>AGENTS.md</code>, un seul fichier pour tous les outils.</strong> Raison : c'est une convention
+ouverte (<a href="https://agents.md">https://agents.md</a>) lue par Codex, Cursor, Gemini CLI, Windsurf, Zed, Aider, l'agent de codage de
+GitHub Copilot et d'autres. Changer d'outil ne vous oblige pas à tout réécrire.</p>
+</blockquote>
+<p>Selon l'outil :</p>
+<table>
+<thead>
+<tr>
+<th>Outil</th>
+<th>Ce qu'il lit</th>
+<th>À faire</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Codex, Cursor, Gemini CLI, Windsurf…</td>
+<td><code>AGENTS.md</code></td>
+<td>rien de plus</td>
+</tr>
+<tr>
+<td>Claude Code</td>
+<td><code>CLAUDE.md</code></td>
+<td>créer un <code>CLAUDE.md</code> d'une ligne : <code>@AGENTS.md</code> (il importe le fichier)</td>
+</tr>
+<tr>
+<td>GitHub Copilot (chat dans VS Code)</td>
+<td><code>.github/copilot-instructions.md</code></td>
+<td>y écrire « Suis les règles de AGENTS.md », ou copier le contenu</td>
+</tr>
+<tr>
+<td>Un chat sans accès aux fichiers</td>
+<td>rien</td>
+<td>coller <code>PROJET.md</code> puis <code>AGENTS.md</code> en début de conversation</td>
+</tr>
+</tbody>
+</table>
+<h3 id="22-la-documentation-a-jour">2.2 La documentation à jour</h3>
+<blockquote>
+<p>✅ <strong>Choix recommandé : brancher les serveurs MCP de documentation de LangChain et de Langfuse.</strong> Raison : l'IA
+lit alors la doc <strong>du jour</strong> au lieu de sa mémoire. C'est le remède le plus efficace contre le code dépassé.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Adresse</th>
+<th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Doc LangChain + LangGraph (MCP)</td>
+<td><code>https://docs.langchain.com/mcp</code></td>
+<td>guides et concepts</td>
+</tr>
+<tr>
+<td>Référence API LangChain (MCP)</td>
+<td><code>https://reference.langchain.com/mcp</code></td>
+<td>signatures exactes</td>
+</tr>
+<tr>
+<td>Doc Langfuse (MCP)</td>
+<td><code>https://langfuse.com/api/mcp</code></td>
+<td>SDK v4, experiments, scores</td>
+</tr>
+<tr>
+<td>Sans MCP : index pour LLM</td>
+<td><code>https://docs.langchain.com/llms.txt</code>, <code>https://langfuse.com/llms.txt</code></td>
+<td>à donner en lien à l'IA</td>
+</tr>
+</tbody>
+</table>
+<p>Exemple avec Claude Code :</p>
+<pre><code class="language-bash">claude mcp add --transport http docs-langchain https://docs.langchain.com/mcp
+claude mcp add --transport http langfuse-docs https://langfuse.com/api/mcp
+</code></pre>
+<p>Les autres outils (Cursor, VS Code, Gemini CLI…) ont un fichier ou un écran de configuration MCP : cherchez
+« MCP » dans leur documentation, et indiquez l'adresse en transport HTTP.</p>
+<blockquote>
+<p>🛡️ Un serveur MCP est du code ou du contenu d'un tiers que votre IA va lire et suivre. Ne branchez que des
+serveurs officiels, comme ceux-ci (rappel J3 : la liste blanche).</p>
+</blockquote>
+<h3 id="23-les-versions-figees">2.3 Les versions figées</h3>
+<p>Partez du <code>pyproject.toml</code> de la formation (<code>infrastructure/pyproject.toml</code>) ou recopiez ses bornes : elles sont
+testées ensemble. Les principales : <code>langchain 1.4</code>, <code>langgraph 1.2</code>, <code>langgraph-checkpoint-sqlite 3.1</code>,
+<code>langfuse 4.15</code> (SDK v4), <code>pydantic 2.13</code>, <code>langchain-ollama 1.1</code> ou <code>langchain-openai 1.6</code>.</p>
+<blockquote>
+<p>✅ <strong>Choix recommandé : <code>uv</code> avec un fichier <code>uv.lock</code> commité.</strong> Raison : l'IA a tendance à « réparer » une erreur
+en changeant une version. Avec un lock, toute mise à jour devient visible, voulue, et se teste.</p>
+</blockquote>
+<h3 id="24-le-mode-de-travail-avec-lia">2.4 Le mode de travail avec l'IA</h3>
+<ul>
+<li><strong>Plan d'abord.</strong> Utilisez le mode « plan » de votre outil s'il en a un, sinon demandez explicitement un plan
+  sans code. Relisez-le avec la grille de la section 4.</li>
+<li><strong>Une étape par conversation</strong>, ou presque. Un contexte court = moins de dérive.</li>
+<li><strong>Elle lance, vous regardez.</strong> Chaque étape se termine par une exécution réelle, le dessin du graphe
+  (<code>draw_ascii()</code>) et la trace Langfuse. Pas de « ça devrait marcher ».</li>
+<li><strong>Commit à chaque étape qui tourne.</strong> Si l'IA casse tout à l'étape suivante, on revient en arrière en une commande.</li>
+</ul>
+<hr />
+<h2 id="3-les-etapes-et-les-choix-a-chaque-etape">3. Les étapes, et les choix à chaque étape</h2>
+<p>Le même ordre que la construction HelpDesk-Ops (<code>construction/etape_NN_*.py</code>). Pour chaque étape : le choix
+recommandé, la raison, le critère « c'est fini », et la référence dans le cours. Le prompt type est en fin de section.</p>
+<h3 id="etape-0-le-socle-modele-stack-configuration">Étape 0 · Le socle : modèle, stack, configuration</h3>
+<table>
+<thead>
+<tr>
+<th>Décision</th>
+<th>Choix recommandé</th>
+<th>Raison</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Modèle</td>
+<td><strong>local</strong> (Ollama sur un poste, vLLM sur un GPU partagé), choisi via une seule fonction <code>get_llm()</code></td>
+<td>données qui ne sortent pas, coût nul, et changer de modèle ne touche qu'une fonction. Un modèle externe par API reste possible : c'est une décision de confidentialité et de coût, à écrire dans <code>PROJET.md</code></td>
+</tr>
+<tr>
+<td>Observabilité</td>
+<td><strong>Langfuse auto-hébergé</strong> (Docker), comme en formation</td>
+<td>les traces contiennent les questions des utilisateurs : elles restent chez vous</td>
+</tr>
+<tr>
+<td>Secrets</td>
+<td><code>.env</code> ignoré par git, un <code>.env.example</code> commité</td>
+<td>l'IA ne doit jamais écrire une clé dans le code</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Fini quand</strong> : un script de vérification (comme <code>infrastructure/smoke_test.py</code>) répond « OK » pour le modèle,
+Langfuse et, si besoin, Qdrant. 📚 J0-01.</p>
+<h3 id="etape-1-observer-avant-de-construire">Étape 1 · Observer avant de construire</h3>
+<table>
+<thead>
+<tr>
+<th>Décision</th>
+<th>Choix recommandé</th>
+<th>Raison</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Quand brancher Langfuse</td>
+<td><strong>dès le premier appel</strong> au modèle</td>
+<td>sinon vous déboguez à l'aveugle les étapes suivantes</td>
+</tr>
+<tr>
+<td>Comment</td>
+<td><code>CallbackHandler</code> de <code>langfuse.langchain</code> dans <code>config={"callbacks": [...]}</code>, et <code>propagate_attributes(session_id=…, user_id=…, tags=[…])</code></td>
+<td>une conversation = une session, regroupée et filtrable</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Fini quand</strong> : un appel apparaît dans Langfuse avec sa session et ses tags. 📚 étape 1, J4-01.</p>
+<h3 id="etape-2-un-agent-avec-des-outils">Étape 2 · Un agent avec des outils</h3>
+<table>
+<thead>
+<tr>
+<th>Décision</th>
+<th>Choix recommandé</th>
+<th>Raison</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Point de départ</td>
+<td><code>create_agent</code> (de <code>langchain.agents</code>) avec 2 ou 3 outils <code>@tool</code></td>
+<td>le plus simple qui marche ; on passe au graphe quand on sait pourquoi</td>
+</tr>
+<tr>
+<td>Les outils</td>
+<td>une <strong>docstring</strong> claire par outil, des paramètres typés, un retour court</td>
+<td>pour un outil, la docstring <strong>est</strong> lue par le modèle : c'est elle qui décide s'il l'appelle</td>
+</tr>
+<tr>
+<td>Les droits</td>
+<td>chaque outil ne donne <strong>que</strong> ce dont il a besoin (lecture seule par défaut)</td>
+<td>un agent peut être manipulé par le texte qu'il lit (OWASP, injection de prompt)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Fini quand</strong> : la trace montre le bon outil appelé avec les bons arguments, sur 3 questions. 📚 étape 2, J1-02.</p>
+<h3 id="etape-3-le-graphe-rendre-le-deroule-explicite">Étape 3 · Le graphe : rendre le déroulé explicite</h3>
+<table>
+<thead>
+<tr>
+<th>Décision</th>
+<th>Choix recommandé</th>
+<th>Raison</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Agent seul ou graphe ?</td>
+<td><strong>graphe</strong> dès qu'une étape doit <strong>toujours</strong> avoir lieu (tri, garde-fou, validation)</td>
+<td>un agent choisit ; un graphe garantit. Le fixe dans le graphe, le variable dans l'agent</td>
+</tr>
+<tr>
+<td>L'état</td>
+<td>un <code>TypedDict</code> <strong>minimal</strong> (ou <code>MessagesState</code> + quelques champs) ; les nœuds renvoient une mise à jour <strong>partielle</strong></td>
+<td>un état gros et flou devient impossible à relire et à tester</td>
+</tr>
+<tr>
+<td>Le routage</td>
+<td><code>add_conditional_edges</code> avec une fonction annotée <code>Literal["a", "b"]</code></td>
+<td>le dessin du graphe montre les branches ; une faute de nom casse à la compilation, pas en production</td>
+</tr>
+<tr>
+<td>L'agent dans le graphe</td>
+<td>l'agent de l'étape 2 devient <strong>un nœud</strong></td>
+<td>on garde ce qui marche</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Fini quand</strong> : <code>draw_ascii()</code> montre le graphe attendu et chaque branche a été parcourue une fois. 📚 étape 3,
+défi 3, J1-03.</p>
+<h3 id="etape-4-la-memoire">Étape 4 · La mémoire</h3>
+<table>
+<thead>
+<tr>
+<th>Décision</th>
+<th>Choix recommandé</th>
+<th>Raison</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Checkpointer</td>
+<td><code>SqliteSaver</code> en développement, Postgres en production ; <code>InMemorySaver</code> seulement dans les tests</td>
+<td>la mémoire doit survivre à un redémarrage</td>
+</tr>
+<tr>
+<td>Identifiant</td>
+<td><code>thread_id</code> = une conversation</td>
+<td>c'est aussi la <code>session_id</code> Langfuse : la trace et la mémoire racontent la même histoire</td>
+</tr>
+<tr>
+<td>Données personnelles</td>
+<td>prévoir dès maintenant comment <strong>supprimer</strong> un thread</td>
+<td>RGPD : le droit à l'effacement vaut aussi pour les checkpoints</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Fini quand</strong> : on relance le script avec le même <code>thread_id</code> et l'agent se souvient. 📚 étape 4, J2-01.</p>
+<h3 id="etape-5-lhumain-dans-la-boucle">Étape 5 · L'humain dans la boucle</h3>
+<table>
+<thead>
+<tr>
+<th>Décision</th>
+<th>Choix recommandé</th>
+<th>Raison</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Quoi valider</td>
+<td><strong>toute action irréversible ou sensible</strong> listée dans <code>PROJET.md</code></td>
+<td>le modèle peut se tromper ou être manipulé ; l'humain garde la main là où ça coûte</td>
+</tr>
+<tr>
+<td>Comment</td>
+<td><code>interrupt()</code> dans un nœud, reprise par <code>Command(resume=…)</code></td>
+<td>la pause est persistée : la validation peut venir des heures plus tard</td>
+</tr>
+<tr>
+<td>Où placer l'action</td>
+<td><strong>après</strong> l'<code>interrupt()</code>, jamais avant</td>
+<td>à la reprise, le nœud repart <strong>du début</strong> : une action placée avant serait exécutée deux fois</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Fini quand</strong> : une action sensible se met en pause, est approuvée, et n'est exécutée <strong>qu'une fois</strong> même si on
+relance la reprise. 📚 étape 5, J2-02.</p>
+<h3 id="etape-6-une-decision-structuree-et-un-systeme-robuste">Étape 6 · Une décision structurée et un système robuste</h3>
+<table>
+<thead>
+<tr>
+<th>Décision</th>
+<th>Choix recommandé</th>
+<th>Raison</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sortie du tri</td>
+<td>un modèle Pydantic avec des <code>Literal</code>, obtenu par <code>with_structured_output(Schema, method="json_schema")</code></td>
+<td>le format est <strong>garanti</strong> : le graphe route sur des valeurs connues</td>
+</tr>
+<tr>
+<td>Où mettre les consignes</td>
+<td>dans le <strong>prompt</strong>, pas dans les <code>Field(description=…)</code></td>
+<td>vérifié le 07/11 : en <code>json_schema</code>, le modèle ne lit pas les descriptions du schéma ; elles contraignent la forme, pas le fond</td>
+</tr>
+<tr>
+<td>Le dernier mot</td>
+<td>une <strong>règle Python</strong> quand elle suffit (plancher d'urgence, hameçonnage → accès)</td>
+<td>explicable, testable, et non manipulable par le texte de l'utilisateur</td>
+</tr>
+<tr>
+<td>Les pannes</td>
+<td><code>RetryPolicy</code> sur les nœuds qui appellent le réseau, <code>TimeoutPolicy</code> <strong>mesurée sur votre matériel</strong>, un <code>error_handler</code> qui <strong>journalise</strong> l'erreur avant de répondre poliment</td>
+<td>vécu en formation : un repli silencieux a caché un timeout pendant des heures</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Fini quand</strong> : 3 cas tests donnent la bonne catégorie, et une panne simulée (serveur coupé) produit un message
+propre <strong>et</strong> une erreur visible dans Langfuse. 📚 étapes 6a et 6, J2-03, J2-04.</p>
+<h3 id="etape-7-connaissances-et-specialistes">Étape 7 · Connaissances et spécialistes</h3>
+<table>
+<thead>
+<tr>
+<th>Décision</th>
+<th>Choix recommandé</th>
+<th>Raison</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Un ou plusieurs agents ?</td>
+<td><strong>un seul</strong> tant qu'il suffit</td>
+<td>chaque agent ajouté coûte du temps, des appels et des erreurs de routage</td>
+</tr>
+<tr>
+<td>Si plusieurs</td>
+<td>un <strong>coordinateur</strong> qui appelle des <strong>spécialistes exposés comme outils</strong>, chacun avec SES outils et SA consigne</td>
+<td>le pattern le plus simple à tracer et à tester ; la description de l'outil décide du routage</td>
+</tr>
+<tr>
+<td>Les documents</td>
+<td>RAG <strong>hybride</strong> (mots-clés + vecteurs) sur Qdrant, avec la source citée dans la réponse</td>
+<td>les sigles et les références (VPN, KB-001) se ratent en vectoriel pur ; une source citée se vérifie</td>
+</tr>
+<tr>
+<td>Outils externes</td>
+<td>MCP, avec une <strong>liste blanche</strong> côté client</td>
+<td>un serveur MCP peut exposer plus d'outils que vous n'en voulez</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Fini quand</strong> : la trace montre le coordinateur, le spécialiste appelé, et les passages récupérés ; la réponse cite
+sa source. 📚 étape 7, défi A, J3-01, J3-02, J3-04.</p>
+<h3 id="etape-8-mesurer-et-se-defendre">Étape 8 · Mesurer et se défendre</h3>
+<table>
+<thead>
+<tr>
+<th>Décision</th>
+<th>Choix recommandé</th>
+<th>Raison</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Le dataset</td>
+<td>les cas de <code>PROJET.md</code>, dans un <strong>JSON du dépôt</strong> synchronisé vers un dataset Langfuse</td>
+<td>le dépôt reste la source de vérité, versionnée avec le code</td>
+</tr>
+<tr>
+<td>Les mesures</td>
+<td><code>dataset.run_experiment(...)</code> avec des évaluateurs <strong>déterministes</strong> d'abord (catégorie juste, priorité juste)</td>
+<td>un chiffre exact et reproductible ; on compare deux runs cas par cas</td>
+</tr>
+<tr>
+<td>Le juge LLM</td>
+<td>seulement pour ce qu'une règle ne mesure pas (fidélité aux sources), et <strong>calibré</strong> sur quelques cas notés à la main</td>
+<td>un juge non calibré donne des chiffres faux avec assurance</td>
+</tr>
+<tr>
+<td>La sécurité</td>
+<td>un garde-fou en entrée, des tests d'attaque (injection, demande hors périmètre) <strong>dans le dataset</strong></td>
+<td>une défense non testée est une impression ; OWASP Top 10 for Agentic Applications comme check-list</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Fini quand</strong> : deux runs comparés dans Langfuse, et une phrase honnête : « x passe de a/20 à b/20 ; ce cas reste
+faux ». 📚 étape 8, défis B et C, J4-04, J4-05, J5-01, J5-02.</p>
+<h3 id="ensuite-vers-la-production">Ensuite · Vers la production</h3>
+<ul>
+<li><code>langgraph.json</code> + <code>langgraph dev</code> pour servir le graphe par une API locale (<code>http://127.0.0.1:2024/docs</code>), voir
+  celui de la racine du cours et <code>infrastructure/serveur_langgraph.*</code>. Le « Studio » que propose <code>langgraph dev</code> est
+  une page web <strong>hébergée par LangChain</strong> (smith.langchain.com) : elle sort de la stack locale, d'où le
+  <code>--no-browser</code> du cours. À n'utiliser qu'avec des données fictives, et en connaissance de cause.</li>
+<li>Une <strong>gate d'évaluation en CI</strong> : l'experiment tourne à chaque modification, la fusion est bloquée si un score
+  baisse (J5-04).</li>
+<li>La conformité : registre des traitements, durée de conservation des traces, information des utilisateurs (J5-03).</li>
+</ul>
+<h3 id="le-prompt-type-pour-chaque-etape">Le prompt type pour chaque étape</h3>
+<pre><code class="language-text">Lis PROJET.md et AGENTS.md. Nous sommes à l'étape &lt;N&gt; : &lt;titre&gt;.
+Objectif : &lt;une phrase&gt;. Critère de fin : &lt;le critère de l'étape&gt;.
+1. Vérifie dans la documentation (MCP) les API que tu comptes utiliser.
+2. Propose un plan court : fichiers touchés, nœuds/outils ajoutés, ce qui change dans l'état.
+   N'écris pas de code avant que j'aie validé le plan.
+3. Ensuite : code, exécution réelle, dessin du graphe (draw_ascii), et dis-moi quoi regarder dans Langfuse.
+Marque les blocs ajoutés par « # ═══ NOUVEAU (étape N) ».
+</code></pre>
+<hr />
+<h2 id="4-relire-ce-que-lia-propose-la-grille">4. Relire ce que l'IA propose : la grille</h2>
+<p>À passer sur chaque plan et chaque diff. Un « non » = on corrige avant d'avancer.</p>
+<ul>
+<li>[ ] Les imports viennent des API <strong>actuelles</strong> (<code>langchain.agents.create_agent</code>, <code>langgraph.graph.StateGraph</code>,
+      <code>langfuse.langchain.CallbackHandler</code>, <code>from langfuse import observe, propagate_attributes</code>) ? Aucun
+      <code>initialize_agent</code>, <code>AgentExecutor</code>, <code>LLMChain</code>, <code>langfuse.decorators</code>, <code>langfuse.callback</code> ?</li>
+<li>[ ] Aucune version modifiée dans <code>pyproject.toml</code> sans que vous l'ayez demandé ?</li>
+<li>[ ] Aucune clé, aucun mot de passe dans le code ?</li>
+<li>[ ] Aucun effet de bord <strong>avant</strong> un <code>interrupt()</code> ?</li>
+<li>[ ] Chaque outil n'a que les droits dont il a besoin ?</li>
+<li>[ ] Les consignes au modèle sont dans le <strong>prompt</strong> (pas seulement dans un schéma) ?</li>
+<li>[ ] Les erreurs sont <strong>journalisées</strong>, pas seulement remplacées par un message aimable ?</li>
+<li>[ ] Le graphe dessiné correspond à ce que vous attendiez ?</li>
+<li>[ ] La trace Langfuse montre une session, des tags, et le chemin attendu ?</li>
+<li>[ ] Un changement de prompt, de modèle ou de règle repasse par l'experiment ?</li>
+</ul>
+<h2 id="5-quand-lia-tourne-en-rond">5. Quand l'IA tourne en rond</h2>
+<ul>
+<li><strong>Elle invente une API</strong> : « Vérifie dans la doc MCP LangChain que <code>&lt;fonction&gt;</code> existe en version 1.x, avec sa
+  signature exacte, et cite la page. »</li>
+<li><strong>Elle corrige une erreur en en créant deux</strong> : arrêtez. Revenez au dernier commit, donnez-lui le message
+  d'erreur <strong>complet</strong> et demandez une hypothèse avant tout correctif.</li>
+<li><strong>Elle veut tout refaire</strong> : rappelez l'étape en cours et son critère de fin. Une étape à la fois.</li>
+<li><strong>Vous ne comprenez plus le code</strong> : demandez « explique ce fichier nœud par nœud, comme à un collègue », puis
+  comparez avec l'étape de construction correspondante du cours.</li>
+</ul></main></div>
+<script src="../_assets/mermaid.min.js"></script>
+<script>
+const racine = document.documentElement;
+const sombre = () => racine.dataset.theme ? racine.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+try { const t = localStorage.getItem("kit-theme"); if (t) racine.dataset.theme = t; } catch (e) {}
+if (location.search.includes("print")) racine.dataset.theme = "light";
+document.querySelector(".theme").addEventListener("click", () => {
+  racine.dataset.theme = sombre() ? "light" : "dark";
+  try { localStorage.setItem("kit-theme", racine.dataset.theme); } catch (e) {}
+  location.reload();
+});
+if (location.search.includes("print")) document.querySelectorAll("details").forEach(d => d.open = true);
+window.addEventListener("beforeprint", () => document.querySelectorAll("details").forEach(d => d.open = true));
+if (window.mermaid) { mermaid.initialize({ startOnLoad: true, theme: sombre() ? "dark" : "default", securityLevel: "strict" }); }
+</script>
+</body></html>

@@ -18,3 +18,6 @@ supports/
 lab0/
 # Traces locales du red-team (prompts d'attaque rejoués sur le poste)
 data/redteam/audit_redteam.jsonl
+# Kit d'autonomie : les slides (PDF des decks) et le zip ne passent pas par Git
+kit_autonomie/07_Slides_formation/
+dist/

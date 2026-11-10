@@ -1,0 +1,377 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Guide d&#x27;installation</title>
+<style>
+:root{--bg:#f7f6f2;--surface:#fff;--surface2:#f0eee8;--text:#1d1d1f;--muted:#5d5d63;--border:#dedbd2;--accent:#1f5fbf;
+--accent-soft:#e3ecfa;--code-bg:#1e1f24;--code-text:#e8e6e1}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141518;--surface:#1c1d21;--surface2:#24262b;--text:#ecebe8;
+--muted:#a3a3aa;--border:#33353b;--accent:#7aa7ff;--accent-soft:#1d2a44;--code-bg:#0f1013}}
+:root[data-theme="dark"]{--bg:#141518;--surface:#1c1d21;--surface2:#24262b;--text:#ecebe8;--muted:#a3a3aa;--border:#33353b;
+--accent:#7aa7ff;--accent-soft:#1d2a44;--code-bg:#0f1013}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.page{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:1300px;margin:0 auto}
+nav.toc{position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;overflow-x:hidden;padding:24px 14px;border-right:1px solid var(--border);font-size:.88rem}
+nav.toc ul{list-style:none;padding-left:12px;margin:0}nav.toc>ul{padding-left:0}
+nav.toc a{color:var(--text);text-decoration:none;display:block;padding:2px 6px;border-radius:6px}
+nav.toc a:hover{background:var(--surface2)}
+nav.toc .retour{display:block;margin-bottom:12px;color:var(--accent)}
+main{padding:32px 40px 80px;min-width:0}
+h1{font-size:2rem;line-height:1.2;margin:1.6em 0 .5em;padding-top:.6em;border-top:3px solid var(--accent)}
+h1:first-child{margin-top:0;border-top:0;padding-top:0}
+h2{font-size:1.4rem;margin:1.8em 0 .5em;line-height:1.3}h3{font-size:1.12rem;margin:1.4em 0 .4em}
+a{color:var(--accent)}
+code{font-family:ui-monospace,"Cascadia Code",Consolas,monospace;font-size:.9em}
+:not(pre)>code{background:var(--surface2);padding:.05em .35em;border-radius:4px}
+pre{background:var(--code-bg);color:var(--code-text);padding:14px 16px;border-radius:8px;overflow:auto;font-size:.84rem;line-height:1.5}
+pre.mermaid{background:var(--surface);color:var(--text);border:1px solid var(--border);text-align:center}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.92rem;display:block;overflow-x:auto}
+th,td{border:1px solid var(--border);padding:6px 10px;text-align:left;vertical-align:top}
+th{background:var(--surface2)}
+blockquote{margin:12px 0;padding:10px 16px;background:var(--accent-soft);border-left:4px solid var(--accent);border-radius:0 8px 8px 0}
+blockquote p{margin:.3em 0}
+details{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 16px;margin:12px 0}
+summary{cursor:pointer;font-weight:600}
+li{margin:3px 0}
+.theme{position:fixed;top:12px;right:14px;font:inherit;border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:8px;padding:4px 10px;cursor:pointer}
+@media (max-width:900px){.page{grid-template-columns:1fr}nav.toc{position:static;max-height:none;border-right:0;border-bottom:1px solid var(--border)}main{padding:20px 16px 60px}}
+@media print{nav.toc,.theme{display:none}.page{display:block}main{padding:0}h1{page-break-before:always;border-top:0}
+h1:first-child{page-break-before:avoid}pre{white-space:pre-wrap;word-break:break-word}details{border:0;padding:0}
+pre,blockquote,.mermaid{page-break-inside:avoid}body{background:#fff;color:#000;font-size:11pt}}
+</style></head><body><button class="theme" type="button" title="Clair / sombre">◐</button>
+<div class="page"><nav class="toc"><a class="retour" href="../00_COMMENCEZ_ICI.html">← Accueil du kit</a><div class="toc">
+<ul>
+<li><a href="#installer-lenvironnement-chez-vous">Installer l'environnement chez vous</a><ul>
+<li><a href="#1-votre-machine">1. Votre machine</a></li>
+<li><a href="#2-installer-les-trois-outils">2. Installer les trois outils</a></li>
+<li><a href="#3-recuperer-le-projet">3. Récupérer le projet</a></li>
+<li><a href="#4-demarrer-la-stack-5-commandes">4. Démarrer la stack (5 commandes)</a></li>
+<li><a href="#5-regler-selon-votre-machine">5. Régler selon votre machine</a></li>
+<li><a href="#6-cas-particuliers">6. Cas particuliers</a></li>
+<li><a href="#7-pannes-frequentes">7. Pannes fréquentes</a></li>
+<li><a href="#8-securite-de-votre-poste">8. Sécurité de votre poste</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav>
+<main><h1 id="installer-lenvironnement-chez-vous">Installer l'environnement chez vous</h1>
+<p>Ce guide installe sur <strong>votre</strong> ordinateur la même stack que pendant la formation, 100 % locale. En salle, le
+modèle tournait sur un GPU avec vLLM. Chez vous, sans GPU NVIDIA, c'est <strong>Ollama</strong> qui le fait tourner sur le
+processeur : c'est plus lent, mais le code ne change pas d'une ligne.</p>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Adresse</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Langfuse</td>
+<td><a href="http://localhost:3000">http://localhost:3000</a></td>
+<td>traces, sessions, scores, prompts, datasets</td>
+</tr>
+<tr>
+<td>Ollama</td>
+<td><a href="http://127.0.0.1:11434">http://127.0.0.1:11434</a></td>
+<td>le modèle de langage (granite4.1:8b, granite4.1:3b, gemma4:12b)</td>
+</tr>
+<tr>
+<td>Qdrant</td>
+<td><a href="http://localhost:6333/dashboard">http://localhost:6333/dashboard</a></td>
+<td>la base vectorielle du RAG (clé API obligatoire)</td>
+</tr>
+<tr>
+<td>MinIO, Postgres, ClickHouse, Redis</td>
+<td>internes</td>
+<td>le stockage de Langfuse</td>
+</tr>
+</tbody>
+</table>
+<p>Durée : <strong>1 à 2 heures</strong>, dont l'essentiel en téléchargements (≈ 25 Go).</p>
+<hr />
+<h2 id="1-votre-machine">1. Votre machine</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Minimum</th>
+<th>Confortable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mémoire vive</td>
+<td>16 Go (avec le petit modèle 3b)</td>
+<td>32 Go</td>
+</tr>
+<tr>
+<td>Disque libre</td>
+<td>40 Go</td>
+<td>60 Go</td>
+</tr>
+<tr>
+<td>Processeur</td>
+<td>4 cœurs récents</td>
+<td>8 cœurs et plus</td>
+</tr>
+<tr>
+<td>GPU</td>
+<td>aucun</td>
+<td>NVIDIA ≥ 8 Go (Ollama l'utilise, voir 6.2)</td>
+</tr>
+<tr>
+<td>Système</td>
+<td>Windows 10/11 64 bits, macOS 13+, Linux 64 bits</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⏱ <strong>À quoi s'attendre sur un portable sans GPU</strong> (mesuré pendant la préparation, i7, 8b) : une étape de tri,
+5 s à 1 min 30 ; un agent avec outils, 2 à 7 minutes ; l'experiment sur 20 cas, 6 à 7 minutes. Pour itérer
+vite, passez au modèle 3b (section 5).</p>
+</blockquote>
+<hr />
+<h2 id="2-installer-les-trois-outils">2. Installer les trois outils</h2>
+<h3 id="docker">Docker</h3>
+<ul>
+<li><strong>Windows</strong> : <a href="https://docs.docker.com/desktop/setup/install/windows-install/">Docker Desktop</a>, moteur
+  <strong>WSL 2</strong> (proposé par défaut). Puis donnez-lui assez de mémoire : créez <code>C:\Users\&lt;vous&gt;\.wslconfig</code> :</li>
+</ul>
+<p><code>ini
+  [wsl2]
+  memory=24GB      # 12GB si votre machine n'a que 16 Go : utilisez alors le modèle 3b</code></p>
+<p>puis, dans PowerShell : <code>wsl --shutdown</code>, et relancez Docker Desktop.
+- <strong>macOS</strong> : <a href="https://docs.docker.com/desktop/setup/install/mac-install/">Docker Desktop</a>. <em>Settings ›
+  Resources › Memory</em> : 16 Go ou plus.
+- <strong>Linux</strong> : <a href="https://docs.docker.com/engine/install/">Docker Engine</a> (pas le paquet <em>snap</em>), puis
+  <code>sudo usermod -aG docker $USER</code>, déconnexion, reconnexion.</p>
+<p>Vérification : <code>docker compose version</code> affiche une version 2.x.</p>
+<h3 id="uv-il-installe-python-312-tout-seul">uv (il installe Python 3.12 tout seul)</h3>
+<pre><code class="language-bash"># macOS / Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
+# Windows (PowerShell)
+powershell -ExecutionPolicy ByPass -c &quot;irm https://astral.sh/uv/install.ps1 | iex&quot;
+</code></pre>
+<p>Fermez et rouvrez le terminal. Vérification : <code>uv --version</code> (0.12 ou plus).</p>
+<h3 id="un-editeur">Un éditeur</h3>
+<p><a href="https://code.visualstudio.com/">VS Code</a> avec les extensions <em>Python</em> et <em>Jupyter</em> (ou PyCharm). Git est
+recommandé : <a href="https://git-scm.com/downloads">https://git-scm.com/downloads</a>.</p>
+<hr />
+<h2 id="3-recuperer-le-projet">3. Récupérer le projet</h2>
+<p>Deux possibilités :</p>
+<ul>
+<li><strong>Depuis le zip reçu</strong> : décompressez-le à un endroit <strong>sans espace ni accent</strong> dans le chemin, par exemple
+  <code>C:\dev\helpdesk-ops</code> ou <code>~/dev/helpdesk-ops</code>. Il contient tout le dépôt, ce kit et les slides en PDF.</li>
+<li><strong>Depuis GitHub</strong>, pour recevoir ensuite les corrections par <code>git pull</code> (tout sauf les slides) :</li>
+</ul>
+<p><code>bash
+  git clone https://github.com/michaelperson/Orcherstation_Monitoring_Agent.git helpdesk-ops</code></p>
+<blockquote>
+<p>⚠️ Windows : choisissez <strong>un seul</strong> monde. Soit tout sous Windows (PowerShell), soit tout sous WSL (dossier
+dans <code>/home/...</code>). Lancer <code>uv</code> sur le même dossier depuis les deux casse l'environnement Python : uv remplace
+sans prévenir le <code>.venv</code> de l'autre plateforme.</p>
+</blockquote>
+<hr />
+<h2 id="4-demarrer-la-stack-5-commandes">4. Démarrer la stack (5 commandes)</h2>
+<p>Toutes les commandes de cette section se lancent <strong>depuis le dossier <code>infrastructure/</code></strong> du projet.</p>
+<pre><code class="language-bash">cd helpdesk-ops/infrastructure
+
+# 1. Environnement Python : Python 3.12 + exactement les versions de uv.lock (quelques minutes, torch inclus)
+uv sync
+
+# 2. Secrets aléatoires, clés Langfuse, clé Qdrant. Sans GPU NVIDIA, il choisit Ollama tout seul.
+uv run generate_env.py
+#    → NOTEZ l'identifiant et le mot de passe Langfuse qu'il affiche (ils sont aussi dans infrastructure/.env)
+
+# 3. Démarrer les services (Langfuse, Qdrant, Ollama...)
+docker compose up -d
+
+# 4. Télécharger les modèles (≈ 15 Go) et les embeddings du RAG
+./pull_models.sh          # macOS / Linux
+.\pull_models.ps1         # Windows (PowerShell)
+
+# 5. Vérifier de bout en bout (6 contrôles)
+uv run smoke_test.py
+</code></pre>
+<blockquote>
+<p>⏳ Au <strong>premier</strong> démarrage, Langfuse met <strong>2 à 3 minutes</strong> à être prêt (migrations de base). Si le smoke test
+échoue sur Langfuse, attendez et relancez-le.</p>
+</blockquote>
+<p>Puis, <strong>depuis la racine du projet</strong> (le dossier au-dessus d'<code>infrastructure/</code>) :</p>
+<pre><code class="language-bash">uv run --project infrastructure jupyter lab
+</code></pre>
+<blockquote>
+<p>⚠️ <code>--project infrastructure</code> est indispensable : la racine n'a pas de <code>pyproject.toml</code>, et un simple
+<code>uv run</code> y utiliserait <strong>en silence</strong> le Python du système, sans les bibliothèques du cours.</p>
+</blockquote>
+<p>Ouvrez <a href="http://localhost:3000">http://localhost:3000</a>, connectez-vous avec les identifiants notés à l'étape 2 : le projet HelpDesk-Ops
+est déjà créé.</p>
+<h3 id="lancer-une-etape-de-la-construction">Lancer une étape de la construction</h3>
+<pre><code class="language-bash"># depuis la racine du projet
+uv run --project infrastructure python construction/etape_03_stategraph.py &quot;srv-erp-02 est-il en ligne ?&quot;
+uv run --project infrastructure python construction/etape_07_rag_specialistes_mcp.py --indexer   # une fois, avant l'étape 7
+</code></pre>
+<h3 id="tester-que-tout-le-code-est-cable-sans-modele-en-quelques-secondes">Tester que tout le code est câblé (sans modèle, en quelques secondes)</h3>
+<pre><code class="language-bash">uv run --project infrastructure pytest construction/test_etapes.py -q
+</code></pre>
+<hr />
+<h2 id="5-regler-selon-votre-machine">5. Régler selon votre machine</h2>
+<p>Tout se règle dans <code>infrastructure/.env</code>, <strong>sans redémarrer</strong> la stack : les scripts et notebooks relisent ce
+fichier à chaque lancement.</p>
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Réglage dans <code>.env</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Itérer vite, ou machine à 16 Go</td>
+<td><code>MODEL_AGENT=granite4.1:3b</code></td>
+</tr>
+<tr>
+<td>Mémoire saturée quand le juge (gemma4) s'ajoute</td>
+<td><code>OLLAMA_MAX_LOADED_MODELS=1</code>, puis <code>docker compose up -d ollama</code></td>
+</tr>
+<tr>
+<td>Un agent répond « je transmets à un technicien »</td>
+<td>ce n'est pas une réponse : c'est le <strong>repli</strong> après un timeout. Lisez l'erreur réelle dans le terminal ou dans Langfuse ; sur CPU, les timeouts des étapes 7 et 8 sont déjà à 600 s</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="6-cas-particuliers">6. Cas particuliers</h2>
+<h3 id="61-macos-apple-silicon">6.1 macOS (Apple Silicon)</h3>
+<p>Ollama dans Docker n'utilise pas le GPU du Mac : il tourne sur le processeur. Pour aller plus vite, installez
+plutôt <a href="https://ollama.com/download">Ollama pour macOS</a>, qui utilise la puce, puis :</p>
+<ol>
+<li>dans <code>infrastructure/.env</code> : <code>OLLAMA_BASE_URL=http://127.0.0.1:11434</code> (déjà la valeur par défaut) ;</li>
+<li>démarrez la stack <strong>sans</strong> le conteneur Ollama : <code>docker compose up -d --scale ollama=0</code> ;</li>
+<li>téléchargez les modèles avec l'Ollama natif : <code>ollama pull granite4.1:8b</code>, <code>granite4.1:3b</code>, <code>gemma4:12b</code> ;</li>
+<li>embeddings : <code>uv run python -c "from helpdesk_ops.kb import precharger_modeles; precharger_modeles()"</code>.</li>
+</ol>
+<h3 id="62-vous-avez-un-gpu-nvidia">6.2 Vous avez un GPU NVIDIA</h3>
+<p>Ollama l'utilisera avec la surcharge GPU (pilote NVIDIA récent ; sous Linux, le NVIDIA Container Toolkit) :</p>
+<pre><code class="language-bash">docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d
+</code></pre>
+<p>Le mode vLLM de la salle (<code>docker-compose.vllm.yml</code>) demande un GPU de 24 Go : voir <code>infrastructure/README.md</code>.</p>
+<h3 id="63-utiliser-un-modele-externe-openai-anthropic-mistral">6.3 Utiliser un modèle externe (OpenAI, Anthropic, Mistral…)</h3>
+<p>C'est possible : seule la fonction <code>creer_llm()</code> de <code>src/helpdesk_ops/config.py</code> (ou <code>get_llm()</code> dans votre
+projet) change. Mais c'est une <strong>décision de confidentialité et de coût</strong> : les demandes et les documents
+partent chez un fournisseur. Écrivez-la dans votre <code>PROJET.md</code> avant de la prendre, n'y envoyez jamais de
+données réelles sans accord, et ne mettez jamais la clé API dans le code (<code>.env</code> uniquement).</p>
+<hr />
+<h2 id="7-pannes-frequentes">7. Pannes fréquentes</h2>
+<table>
+<thead>
+<tr>
+<th>Symptôme</th>
+<th>Cause probable</th>
+<th>Que faire</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>uv run</code> dit qu'un module est introuvable</td>
+<td>lancé hors du projet, sans <code>--project infrastructure</code></td>
+<td>relancer depuis la racine avec <code>--project infrastructure</code></td>
+</tr>
+<tr>
+<td>Langfuse 401 / « refuse les clés »</td>
+<td>Langfuse démarre encore, ou <code>.env</code> régénéré après le premier démarrage</td>
+<td>attendre 3 min ; sinon remise à zéro (ci-dessous)</td>
+</tr>
+<tr>
+<td>Qdrant 401</td>
+<td>clé du <code>.env</code> différente de celle du conteneur</td>
+<td>même <code>.env</code> pour la stack et pour Python ; sinon remise à zéro</td>
+</tr>
+<tr>
+<td>Une requête Qdrant ou Ollama prend 2 s de trop (Windows)</td>
+<td><code>localhost</code> résolu d'abord en IPv6</td>
+<td>utiliser <code>127.0.0.1</code></td>
+</tr>
+<tr>
+<td><code>TLS handshake timeout</code> pendant un téléchargement</td>
+<td>réseau ou pare-feu qui bloque les gros messages TLS</td>
+<td>relancer ; voir la section « Réseau » de <code>infrastructure/README.md</code></td>
+</tr>
+<tr>
+<td>Ollama s'arrête, « out of memory »</td>
+<td>deux gros modèles chargés ensemble</td>
+<td><code>OLLAMA_MAX_LOADED_MODELS=1</code>, modèle 3b, plus de mémoire pour WSL</td>
+</tr>
+<tr>
+<td><code>Client failed to connect: fileno</code> (MCP dans Jupyter, Windows)</td>
+<td>stdio sans fichier journal</td>
+<td>utiliser <code>transport_stdio()</code> du cours, qui en fournit un</td>
+</tr>
+<tr>
+<td><code>draw_ascii()</code> : ImportError</td>
+<td><code>grandalf</code> absent</td>
+<td>il est dans le groupe dev : <code>uv sync</code> depuis <code>infrastructure/</code></td>
+</tr>
+</tbody>
+</table>
+<p>Commandes utiles (depuis <code>infrastructure/</code>) :</p>
+<table>
+<thead>
+<tr>
+<th>Besoin</th>
+<th>Commande</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>État des services</td>
+<td><code>docker compose ps</code></td>
+</tr>
+<tr>
+<td>Journaux de Langfuse</td>
+<td><code>docker compose logs -f langfuse-web langfuse-worker</code></td>
+</tr>
+<tr>
+<td>Arrêter (données conservées)</td>
+<td><code>docker compose down</code></td>
+</tr>
+<tr>
+<td><strong>Remise à zéro complète</strong> (traces, vecteurs, modèles)</td>
+<td><code>docker compose down -v</code>, puis <code>uv run generate_env.py --force</code>, puis reprendre la section 4</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8-securite-de-votre-poste">8. Sécurité de votre poste</h2>
+<ul>
+<li><code>infrastructure/.env</code> contient des secrets : ne le partagez pas et ne le commitez jamais.</li>
+<li>La stack n'a pas de TLS : elle n'écoute que sur votre machine. N'exposez pas les ports 3000 et 6333 sur un
+  réseau.</li>
+<li>Télémétrie coupée (Langfuse, Qdrant, FastMCP, Streamlit, langgraph-cli) : rien ne sort de votre poste, hormis
+  les téléchargements d'installation.</li>
+<li>Versions figées et testées ensemble (<code>uv.lock</code>, images Docker figées dans <code>.env</code>). La documentation Langfuse
+  présente désormais un SDK Python v5 : le cours reste sur le <strong>SDK v4</strong>. Ne montez une version qu'en connaissance
+  de cause, puis repassez le smoke test.</li>
+</ul>
+<p>Pour aller plus loin : <code>infrastructure/README.md</code> (tous les détails techniques) et le
+notebook <code>notebooks/J0_01_installer_et_brancher.ipynb</code>, qui reconstruit la stack service par service pour
+comprendre comment chaque brique se branche.</p></main></div>
+<script src="../_assets/mermaid.min.js"></script>
+<script>
+const racine = document.documentElement;
+const sombre = () => racine.dataset.theme ? racine.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+try { const t = localStorage.getItem("kit-theme"); if (t) racine.dataset.theme = t; } catch (e) {}
+if (location.search.includes("print")) racine.dataset.theme = "light";
+document.querySelector(".theme").addEventListener("click", () => {
+  racine.dataset.theme = sombre() ? "light" : "dark";
+  try { localStorage.setItem("kit-theme", racine.dataset.theme); } catch (e) {}
+  location.reload();
+});
+if (location.search.includes("print")) document.querySelectorAll("details").forEach(d => d.open = true);
+window.addEventListener("beforeprint", () => document.querySelectorAll("details").forEach(d => d.open = true));
+if (window.mermaid) { mermaid.initialize({ startOnLoad: true, theme: sombre() ? "dark" : "default", securityLevel: "strict" }); }
+</script>
+</body></html>

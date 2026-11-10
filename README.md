@@ -2,6 +2,13 @@
 
 Formation BStorm : LangGraph + Langfuse, stack 100 % locale (vLLM sur le GPU de la salle, Qdrant, Langfuse auto-hébergé ; Ollama en repli sur un poste sans GPU).
 
+## Après la formation : le kit d'autonomie
+
+Ouvrez `COMMENCEZ_ICI.html` (ou `kit_autonomie/00_COMMENCEZ_ICI.html`) : installation chez vous, parcours sur
+6 semaines, support consolidé de toute la matière (dont un cours complet sur MCP), guide interactif pour construire
+votre propre projet de A à Z, guide pour travailler avec Claude, ressources vérifiées. Les corrigés des exercices
+sont dans `exercices/corriges/`.
+
 ## Chapitre 0 (hors des 4 jours) : comprendre la stack
 
 Le pack `infrastructure/` installe tout en une commande. Pour comprendre ce qu'il assemble, le notebook `notebooks/J0_01_installer_et_brancher.ipynb` fait reconstruire la stack service par service (Qdrant, Langfuse et ses cinq dépendances, vLLM ou Ollama) dans un dossier `lab0/`, à côté du pack et sans le toucher, puis brancher Python sur chaque service. À faire avant la formation ou à garder en annexe.
@@ -41,6 +48,7 @@ Le J4, à la demande du formateur : `bash infrastructure/vllm_mode.sh juge` (le 
 | --- | --- |
 | `notebooks/` | un notebook par séquence (`J0_01` pour le chapitre 0, puis `J1_01` …) |
 | `exercices/enonces/` | exercices de la semaine |
+| `kit_autonomie/` | le kit d'autonomie : support consolidé, guides, ressources (page d'accueil : `00_COMMENCEZ_ICI.html`) |
 | `comprendre/` | animations pas à pas des mécanismes difficiles (interrupt et reprise…), à ouvrir dans le navigateur |
 | `src/helpdesk_ops/` | code partagé par les notebooks |
 | `infrastructure/` | Docker Compose, `.env` généré, scripts d'installation et `smoke_test.py` |

@@ -4,6 +4,9 @@ La formation s'arrête, HelpDesk-Ops non. Tout ce qui a été vu vite, ou pas du
 exécutés avec leurs sorties, exercices et corrigés, fiches de référence (🔎) dans les annexes des decks, et les
 étapes de la construction pas à pas, distribuées pendant la formation.
 
+> 🧭 La version complète de ce parcours, semaine par semaine, avec le support consolidé et les guides, est dans le
+> **kit d'autonomie** : `kit_autonomie/00_COMMENCEZ_ICI.html`.
+
 ## Avant de commencer
 
 ```bash

@@ -1,0 +1,326 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Guide Claude</title>
+<style>
+:root{--bg:#f7f6f2;--surface:#fff;--surface2:#f0eee8;--text:#1d1d1f;--muted:#5d5d63;--border:#dedbd2;--accent:#1f5fbf;
+--accent-soft:#e3ecfa;--code-bg:#1e1f24;--code-text:#e8e6e1}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141518;--surface:#1c1d21;--surface2:#24262b;--text:#ecebe8;
+--muted:#a3a3aa;--border:#33353b;--accent:#7aa7ff;--accent-soft:#1d2a44;--code-bg:#0f1013}}
+:root[data-theme="dark"]{--bg:#141518;--surface:#1c1d21;--surface2:#24262b;--text:#ecebe8;--muted:#a3a3aa;--border:#33353b;
+--accent:#7aa7ff;--accent-soft:#1d2a44;--code-bg:#0f1013}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.page{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:1300px;margin:0 auto}
+nav.toc{position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;overflow-x:hidden;padding:24px 14px;border-right:1px solid var(--border);font-size:.88rem}
+nav.toc ul{list-style:none;padding-left:12px;margin:0}nav.toc>ul{padding-left:0}
+nav.toc a{color:var(--text);text-decoration:none;display:block;padding:2px 6px;border-radius:6px}
+nav.toc a:hover{background:var(--surface2)}
+nav.toc .retour{display:block;margin-bottom:12px;color:var(--accent)}
+main{padding:32px 40px 80px;min-width:0}
+h1{font-size:2rem;line-height:1.2;margin:1.6em 0 .5em;padding-top:.6em;border-top:3px solid var(--accent)}
+h1:first-child{margin-top:0;border-top:0;padding-top:0}
+h2{font-size:1.4rem;margin:1.8em 0 .5em;line-height:1.3}h3{font-size:1.12rem;margin:1.4em 0 .4em}
+a{color:var(--accent)}
+code{font-family:ui-monospace,"Cascadia Code",Consolas,monospace;font-size:.9em}
+:not(pre)>code{background:var(--surface2);padding:.05em .35em;border-radius:4px}
+pre{background:var(--code-bg);color:var(--code-text);padding:14px 16px;border-radius:8px;overflow:auto;font-size:.84rem;line-height:1.5}
+pre.mermaid{background:var(--surface);color:var(--text);border:1px solid var(--border);text-align:center}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.92rem;display:block;overflow-x:auto}
+th,td{border:1px solid var(--border);padding:6px 10px;text-align:left;vertical-align:top}
+th{background:var(--surface2)}
+blockquote{margin:12px 0;padding:10px 16px;background:var(--accent-soft);border-left:4px solid var(--accent);border-radius:0 8px 8px 0}
+blockquote p{margin:.3em 0}
+details{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 16px;margin:12px 0}
+summary{cursor:pointer;font-weight:600}
+li{margin:3px 0}
+.theme{position:fixed;top:12px;right:14px;font:inherit;border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:8px;padding:4px 10px;cursor:pointer}
+@media (max-width:900px){.page{grid-template-columns:1fr}nav.toc{position:static;max-height:none;border-right:0;border-bottom:1px solid var(--border)}main{padding:20px 16px 60px}}
+@media print{nav.toc,.theme{display:none}.page{display:block}main{padding:0}h1{page-break-before:always;border-top:0}
+h1:first-child{page-break-before:avoid}pre{white-space:pre-wrap;word-break:break-word}details{border:0;padding:0}
+pre,blockquote,.mermaid{page-break-inside:avoid}body{background:#fff;color:#000;font-size:11pt}}
+</style></head><body><button class="theme" type="button" title="Clair / sombre">◐</button>
+<div class="page"><nav class="toc"><a class="retour" href="../00_COMMENCEZ_ICI.html">← Accueil du kit</a><div class="toc">
+<ul>
+<li><a href="#avancer-sur-un-projet-langchain-langgraph-avec-claude">Avancer sur un projet LangChain / LangGraph avec Claude</a><ul>
+<li><a href="#1-cadrer-le-projet-avec-claude">1. Cadrer le projet avec Claude</a></li>
+<li><a href="#2-installer-et-configurer-claude-code">2. Installer et configurer Claude Code</a></li>
+<li><a href="#3-la-methode-de-travail">3. La méthode de travail</a></li>
+<li><a href="#4-bibliotheque-de-prompts">4. Bibliothèque de prompts</a></li>
+<li><a href="#5-la-grille-de-relecture">5. La grille de relecture</a></li>
+<li><a href="#6-quand-lia-tourne-en-rond">6. Quand l'IA tourne en rond</a></li>
+<li><a href="#7-aller-plus-loin-avec-claude-code">7. Aller plus loin avec Claude Code</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav>
+<main><h1 id="avancer-sur-un-projet-langchain-langgraph-avec-claude">Avancer sur un projet LangChain / LangGraph avec Claude</h1>
+<p>Ce guide vous apprend à utiliser <strong>Claude</strong> (Claude Code de préférence, ou claude.ai) comme partenaire de
+développement sur <strong>votre</strong> projet d'agents. Il complète le guide interactif (<code>04_Guide_interactif_projet</code>) : le
+guide interactif dit <strong>quoi</strong> construire, étape par étape ; ce guide dit <strong>comment travailler avec l'IA</strong> pour le
+construire sans perdre la main.</p>
+<blockquote>
+<p><strong>La règle d'or : l'IA code vite, donc elle se trompe vite.</strong> Le code, c'est elle. Les décisions, c'est vous.
+Votre rôle : cadrer, faire planifier, relire, exécuter, mesurer.</p>
+</blockquote>
+<hr />
+<h2 id="1-cadrer-le-projet-avec-claude">1. Cadrer le projet avec Claude</h2>
+<p>Avant toute ligne de code, trois fichiers à la racine de votre projet (modèles dans <code>modeles/</code>) :</p>
+<table>
+<thead>
+<tr>
+<th>Fichier</th>
+<th>Rôle</th>
+<th>Qui l'écrit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PROJET.md</code></td>
+<td>la décision, les actions sensibles, les données, les cas de test, l'avancement</td>
+<td><strong>vous</strong>, avec Claude comme intervieweur</td>
+</tr>
+<tr>
+<td><code>AGENTS.md</code></td>
+<td>les règles que l'IA doit suivre : versions, API autorisées/interdites, méthode</td>
+<td>vous (le modèle est prêt, adaptez la section « Projet »)</td>
+</tr>
+<tr>
+<td><code>CLAUDE.md</code></td>
+<td>le fichier que Claude Code lit à chaque session ; il importe <code>AGENTS.md</code></td>
+<td>une ligne : <code>@AGENTS.md</code></td>
+</tr>
+</tbody>
+</table>
+<p>Prompt d'interview (aucun code) :</p>
+<pre><code class="language-text">Lis PROJET.md. Pose-moi UNE question à la fois pour le compléter, en commençant
+par la décision que le système doit prendre. N'écris aucun code.
+Quand c'est fini, réécris PROJET.md avec mes réponses, propose 10 cas de test
+(dont 2 tentatives d'abus) et liste ce qui reste flou.
+</code></pre>
+<blockquote>
+<p>✅ Les <strong>cas de test d'abord</strong> : ils deviendront votre dataset Langfuse (étape 10 du guide interactif).</p>
+</blockquote>
+<hr />
+<h2 id="2-installer-et-configurer-claude-code">2. Installer et configurer Claude Code</h2>
+<h3 id="21-installation">2.1 Installation</h3>
+<p>Claude Code fonctionne dans un terminal, dans VS Code / JetBrains (extension), dans l'application de bureau ou
+sur le web. Installation officielle (à jour : <a href="https://code.claude.com/docs">https://code.claude.com/docs</a>) :</p>
+<pre><code class="language-bash"># macOS, Linux, WSL
+curl -fsSL https://claude.ai/install.sh | bash
+# Windows (PowerShell)
+irm https://claude.ai/install.ps1 | iex
+</code></pre>
+<p>Puis, dans le dossier de votre projet : <code>claude</code>. Il faut un compte Claude (abonnement Pro/Max ou clé API).</p>
+<blockquote>
+<p>Pas de Claude Code ? Sur <strong>claude.ai</strong>, créez un <strong>Projet</strong>, ajoutez <code>PROJET.md</code>, <code>AGENTS.md</code> et vos fichiers
+clés comme connaissances du projet, et collez les mêmes prompts. Vous exécutez le code vous-même et recollez
+les erreurs complètes.</p>
+</blockquote>
+<h3 id="22-la-documentation-a-jour-par-mcp">2.2 La documentation à jour, par MCP</h3>
+<p>Claude connaît LangChain tel qu'il était pendant son entraînement. LangChain 1.x, LangGraph 1.x et le SDK
+Langfuse v4 ont beaucoup changé. Branchez les <strong>serveurs MCP officiels de documentation</strong> : Claude lira la doc du
+jour au lieu de sa mémoire.</p>
+<pre><code class="language-bash">claude mcp add --transport http docs-langchain https://docs.langchain.com/mcp
+claude mcp add --transport http langfuse-docs https://langfuse.com/api/mcp
+</code></pre>
+<p>Dans Claude Code, <code>/mcp</code> affiche les serveurs connectés. Sans MCP, donnez les index pour LLM :
+<code>https://docs.langchain.com/llms.txt</code> et <code>https://langfuse.com/llms.txt</code>.</p>
+<blockquote>
+<p>🛡️ Un serveur MCP est du code ou du contenu d'un tiers que l'IA va lire et suivre (voir le chapitre 5 du
+support). Ne branchez que des serveurs <strong>officiels</strong> et de confiance.</p>
+</blockquote>
+<h3 id="23-les-permissions-proteger-vos-secrets">2.3 Les permissions : protéger vos secrets</h3>
+<p>Copiez <code>modeles/.claude/settings.json</code> dans votre projet. Il interdit à Claude de lire <code>.env</code> et autorise sans
+question les commandes sûres et fréquentes (tests, lancement d'un script) :</p>
+<pre><code class="language-json">{
+  &quot;permissions&quot;: {
+    &quot;allow&quot;: [&quot;Bash(uv run pytest:*)&quot;, &quot;Bash(uv run python:*)&quot;, &quot;Bash(git status)&quot;, &quot;Bash(git diff:*)&quot;],
+    &quot;deny&quot;: [&quot;Read(./.env)&quot;, &quot;Read(./**/.env)&quot;, &quot;Bash(git push:*)&quot;]
+  }
+}
+</code></pre>
+<h3 id="24-des-commandes-pretes-a-lemploi">2.4 Des commandes prêtes à l'emploi</h3>
+<p><code>modeles/.claude/commands/</code> contient des commandes personnalisées. Copiez le dossier dans votre projet, puis
+tapez dans Claude Code :</p>
+<table>
+<thead>
+<tr>
+<th>Commande</th>
+<th>Ce qu'elle fait</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/etape 4 Le graphe</code></td>
+<td>lance une étape selon la méthode (plan, validation, code, exécution, Langfuse)</td>
+</tr>
+<tr>
+<td><code>/revue</code></td>
+<td>relit le diff courant avec la grille de la section 5</td>
+</tr>
+<tr>
+<td><code>/expliquer construction/etape_05_validation_ticket.py</code></td>
+<td>explique un fichier nœud par nœud, comme à un collègue</td>
+</tr>
+<tr>
+<td><code>/mesurer</code></td>
+<td>lance l'experiment, compare au run précédent, rédige la phrase honnête</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-la-methode-de-travail">3. La méthode de travail</h2>
+<ol>
+<li><strong>Plan d'abord.</strong> Passez en <strong>mode plan</strong> (<code>Maj+Tab</code> jusqu'à « plan mode ») : Claude lit et propose, sans
+   modifier de fichier. Relisez le plan avec la grille de la section 5, corrigez-le, puis validez.</li>
+<li><strong>Une étape par conversation.</strong> <code>/clear</code> entre deux étapes : un contexte court dérive moins. Le fil se garde
+   dans <code>PROJET.md</code> (section « Avancement »), pas dans la conversation.</li>
+<li><strong>Elle exécute, vous regardez.</strong> Chaque étape finit par une exécution réelle, <code>draw_ascii()</code> et la trace
+   Langfuse. Jamais « ça devrait marcher ».</li>
+<li><strong>Commit à chaque étape qui tourne.</strong> Si l'étape suivante casse tout : <code>git restore .</code> ou, dans Claude Code,
+   <code>Échap</code> deux fois (ou <code>/rewind</code>) pour revenir à un point antérieur de la conversation et du code.</li>
+<li><strong>Interrompre tôt.</strong> <code>Échap</code> arrête Claude dès qu'il part dans une mauvaise direction.</li>
+<li><strong>Apprendre, pas seulement livrer.</strong> Demandez régulièrement « explique-moi pourquoi », et refaites seul une
+   étape de temps en temps (mode tuteur, section 4.9).</li>
+</ol>
+<hr />
+<h2 id="4-bibliotheque-de-prompts">4. Bibliothèque de prompts</h2>
+<h3 id="41-lancer-une-etape-le-prompt-type">4.1 Lancer une étape (le prompt type)</h3>
+<pre><code class="language-text">Lis PROJET.md et AGENTS.md. Nous sommes à l'étape &lt;N&gt; : &lt;titre&gt;.
+Objectif : &lt;une phrase&gt;. Critère de fin : &lt;le critère de l'étape&gt;.
+1. Vérifie dans la documentation (MCP) les API que tu comptes utiliser et cite les pages.
+2. Propose un plan court : fichiers touchés, nœuds/outils ajoutés, ce qui change dans l'état.
+   N'écris pas de code avant que j'aie validé le plan.
+3. Ensuite : code, exécution réelle, dessin du graphe (draw_ascii), et dis-moi quoi regarder dans Langfuse.
+Marque les blocs ajoutés par « # ═══ NOUVEAU (étape N) ».
+</code></pre>
+<p>Les prompts propres à chaque étape (0 à 12) sont dans le <strong>guide interactif</strong>, bouton « Copier ».</p>
+<h3 id="42-sinspirer-du-cours-sans-le-recopier">4.2 S'inspirer du cours sans le recopier</h3>
+<pre><code class="language-text">Lis construction/etape_07_rag_specialistes_mcp.py.
+Explique le pattern « spécialistes comme outils » (comme_outil, coordinateur) en 10 lignes,
+puis propose comment l'adapter à MON projet (PROJET.md) : quels spécialistes, quels outils
+chacun, quelle description d'outil décide du routage. Pas de code.
+</code></pre>
+<h3 id="43-comprendre-un-fichier">4.3 Comprendre un fichier</h3>
+<pre><code class="language-text">Explique &lt;fichier&gt; nœud par nœud, comme à un collègue qui connaît Python mais pas LangGraph.
+Pour chaque nœud : ce qu'il lit dans l'état, ce qu'il renvoie, et pourquoi.
+Termine par le dessin du graphe en ASCII et les 3 pièges à éviter si je le modifie.
+</code></pre>
+<h3 id="44-deboguer-sans-correctifs-en-rafale">4.4 Déboguer (sans correctifs en rafale)</h3>
+<pre><code class="language-text">Voici l'erreur COMPLÈTE (traceback) et ce que montre la trace Langfuse : &lt;coller&gt;.
+Donne 2 hypothèses classées par probabilité, et pour chacune comment la VÉRIFIER
+(commande, print, endroit de la trace). Ne corrige rien avant que nous ayons confirmé la cause.
+</code></pre>
+<blockquote>
+<p>Les causes vues en formation : clés <code>.env</code> qui ne correspondent pas (401), <code>thread_id</code> mal tapé, timeout
+trop court sur CPU masqué par un repli, <code>localhost</code> au lieu de <code>127.0.0.1</code> sous Windows, consignes mises dans
+<code>Field(description=…)</code> en <code>json_schema</code>.</p>
+</blockquote>
+<h3 id="45-ecrire-les-tests">4.5 Écrire les tests</h3>
+<pre><code class="language-text">Écris des tests pytest pour le graphe, avec GenericFakeChatModel (langchain_core) à la place du modèle :
+câblage (le graphe compile), routage (chaque branche), garde-fou (une injection n'atteint aucun outil),
+idempotence (rejouer la reprise ne crée pas deux fois l'action). Rapides, sans GPU ni Langfuse.
+</code></pre>
+<h3 id="46-mesurer">4.6 Mesurer</h3>
+<pre><code class="language-text">Lance l'experiment sur le dataset (dataset.run_experiment, max_concurrency=1) avec le prompt actuel,
+puis avec &lt;le changement&gt;. Compare les deux runs cas par cas et rédige la phrase honnête :
+« x passe de a/N à b/N ; ces cas restent faux : … ». Donne les chiffres même s'ils baissent.
+</code></pre>
+<h3 id="47-attaquer-son-propre-systeme">4.7 Attaquer son propre système</h3>
+<pre><code class="language-text">Avec l'OWASP Top 10 for Agentic Applications comme check-list, propose 8 attaques réalistes
+contre mon système (injection directe, injection indirecte via un document RAG ou un résultat
+d'outil, demande hors périmètre, abus d'outil, boucle infinie, fuite de données d'un autre utilisateur).
+Ajoute-les au dataset avec le résultat attendu. Pas de contenu réellement dangereux.
+</code></pre>
+<h3 id="48-moderniser-un-tutoriel-trouve-en-ligne">4.8 Moderniser un tutoriel trouvé en ligne</h3>
+<pre><code class="language-text">Ce code vient d'un tutoriel LangChain 0.x : &lt;coller&gt;. Réécris-le en LangChain 1.x / LangGraph 1.x
+(create_agent, StateGraph, SDK Langfuse v4). Vérifie chaque import dans la doc MCP et liste
+ce qui a changé et pourquoi.
+</code></pre>
+<h3 id="49-le-mode-tuteur-pour-apprendre">4.9 Le mode tuteur (pour apprendre)</h3>
+<pre><code class="language-text">Je veux apprendre, pas recevoir la solution. Pour l'étape &lt;N&gt;, donne-moi : l'objectif, les API à
+utiliser avec un lien vers leur doc, et 3 indices progressifs. Je code moi-même ; tu relis ensuite
+mon code avec la grille de AGENTS.md, sans le réécrire, en me posant des questions.
+</code></pre>
+<hr />
+<h2 id="5-la-grille-de-relecture">5. La grille de relecture</h2>
+<p>À passer sur chaque plan et chaque diff. Un « non » = on corrige avant d'avancer.</p>
+<ul>
+<li>[ ] Imports <strong>actuels</strong> : <code>langchain.agents.create_agent</code>, <code>langgraph.graph.StateGraph</code>,
+      <code>langfuse.langchain.CallbackHandler</code>, <code>from langfuse import observe, propagate_attributes, get_client</code> ?
+      Aucun <code>initialize_agent</code>, <code>AgentExecutor</code>, <code>LLMChain</code>, <code>langfuse.decorators</code>, <code>langfuse.callback</code> ?</li>
+<li>[ ] Aucune version modifiée dans <code>pyproject.toml</code> / <code>uv.lock</code> sans demande ?</li>
+<li>[ ] Aucune clé, aucun mot de passe dans le code ni dans les logs ?</li>
+<li>[ ] Aucun effet de bord <strong>avant</strong> un <code>interrupt()</code> ? Action idempotente ?</li>
+<li>[ ] Chaque outil n'a que les droits nécessaires ? Les serveurs MCP passent par une liste blanche ?</li>
+<li>[ ] Les consignes au modèle sont dans le <strong>prompt</strong> (pas seulement dans <code>Field(description=…)</code>) ?</li>
+<li>[ ] Les règles métier explicables sont en Python, appliquées après le modèle <strong>et</strong> dans l'évaluation ?</li>
+<li>[ ] Les erreurs sont <strong>journalisées</strong>, pas seulement remplacées par un message aimable ?</li>
+<li>[ ] Les timeouts ont été <strong>mesurés</strong> sur le matériel cible ?</li>
+<li>[ ] Le graphe dessiné correspond à ce que vous attendiez ?</li>
+<li>[ ] La trace Langfuse montre une session, des tags, le chemin attendu, sans donnée personnelle en clair ?</li>
+<li>[ ] Un changement de prompt, de modèle ou de règle repasse par l'experiment ?</li>
+</ul>
+<hr />
+<h2 id="6-quand-lia-tourne-en-rond">6. Quand l'IA tourne en rond</h2>
+<table>
+<thead>
+<tr>
+<th>Symptôme</th>
+<th>Réponse</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Elle invente une API</td>
+<td>« Vérifie dans la doc MCP que <code>&lt;fonction&gt;</code> existe en 1.x, avec sa signature exacte, et cite la page. »</td>
+</tr>
+<tr>
+<td>Elle corrige une erreur en en créant deux</td>
+<td>Arrêtez (<code>Échap</code>). Revenez au dernier commit (<code>/rewind</code> ou <code>git restore .</code>). Donnez l'erreur complète et exigez une hypothèse avant tout correctif.</td>
+</tr>
+<tr>
+<td>Elle veut tout refaire</td>
+<td>Rappelez l'étape en cours et son critère de fin. Une étape à la fois.</td>
+</tr>
+<tr>
+<td>Elle change une version « pour réparer »</td>
+<td>Refusez. Le lock est figé ; une montée de version est une décision à part, testée.</td>
+</tr>
+<tr>
+<td>Vous ne comprenez plus le code</td>
+<td><code>/expliquer &lt;fichier&gt;</code>, puis comparez avec l'étape de construction correspondante du cours.</td>
+</tr>
+<tr>
+<td>Le contexte est long et elle oublie les règles</td>
+<td><code>/clear</code>, puis repartez de <code>PROJET.md</code> (section Avancement).</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="7-aller-plus-loin-avec-claude-code">7. Aller plus loin avec Claude Code</h2>
+<ul>
+<li><strong>Sous-agents</strong> : demandez « utilise un sous-agent pour lire toute la doc LangGraph sur <code>interrupt</code> et
+  résume-moi les points qui concernent mon nœud <code>valider</code> » : la lecture ne pollue pas votre conversation.</li>
+<li><strong>Hooks</strong> : un hook peut lancer <code>uv run pytest -q</code> après chaque modification de fichier. Voir la
+  documentation officielle de Claude Code (section <em>Hooks</em>).</li>
+<li><strong>Skills</strong> : une compétence réutilisable (instructions + scripts) dans <code>.claude/skills/&lt;nom&gt;/SKILL.md</code>, par
+  exemple « ajouter un spécialiste selon nos conventions ».</li>
+<li><strong>Documentation officielle de Claude Code</strong> : <a href="https://code.claude.com/docs">https://code.claude.com/docs</a>.</li>
+</ul></main></div>
+<script src="../_assets/mermaid.min.js"></script>
+<script>
+const racine = document.documentElement;
+const sombre = () => racine.dataset.theme ? racine.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+try { const t = localStorage.getItem("kit-theme"); if (t) racine.dataset.theme = t; } catch (e) {}
+if (location.search.includes("print")) racine.dataset.theme = "light";
+document.querySelector(".theme").addEventListener("click", () => {
+  racine.dataset.theme = sombre() ? "light" : "dark";
+  try { localStorage.setItem("kit-theme", racine.dataset.theme); } catch (e) {}
+  location.reload();
+});
+if (location.search.includes("print")) document.querySelectorAll("details").forEach(d => d.open = true);
+window.addEventListener("beforeprint", () => document.querySelectorAll("details").forEach(d => d.open = true));
+if (window.mermaid) { mermaid.initialize({ startOnLoad: true, theme: sombre() ? "dark" : "default", securityLevel: "strict" }); }
+</script>
+</body></html>

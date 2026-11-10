@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kit d'autonomie</title>
+<style>
+:root{--bg:#f7f6f2;--surface:#fff;--surface2:#f0eee8;--text:#1d1d1f;--muted:#5d5d63;--border:#dedbd2;--accent:#1f5fbf;--accent-soft:#e3ecfa}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141518;--surface:#1c1d21;--surface2:#24262b;--text:#ecebe8;--muted:#a3a3aa;--border:#33353b;--accent:#7aa7ff;--accent-soft:#1d2a44}}
+:root[data-theme="dark"]{--bg:#141518;--surface:#1c1d21;--surface2:#24262b;--text:#ecebe8;--muted:#a3a3aa;--border:#33353b;--accent:#7aa7ff;--accent-soft:#1d2a44}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:48px 24px 72px}
+.sur{color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-size:.85rem;margin:0}
+h1{font-size:2.3rem;line-height:1.15;margin:.2em 0 .3em}
+.intro{font-size:1.1rem;color:var(--muted);max-width:760px}
+.ordre{background:var(--accent-soft);border-radius:12px;padding:16px 20px;margin:28px 0}
+.ordre ol{margin:6px 0 0;padding-left:22px}
+h2{font-size:1.15rem;margin:36px 0 12px}
+.grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+a.carte{display:block;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;text-decoration:none;color:var(--text);transition:border-color .15s, transform .15s}
+a.carte:hover{border-color:var(--accent);transform:translateY(-1px)}
+.carte .n{font-size:.8rem;color:var(--accent);font-weight:700;letter-spacing:.04em}
+.carte h3{margin:2px 0 6px;font-size:1.08rem}
+.carte p{margin:0;color:var(--muted);font-size:.93rem}
+.mis-en-avant{border-left:4px solid var(--accent)!important}
+.liens-secondaires{columns:2 280px;padding-left:18px;font-size:.95rem}
+a{color:var(--accent)}
+code{font-family:ui-monospace,Consolas,monospace;background:var(--surface2);padding:.05em .35em;border-radius:4px;font-size:.9em}
+.pied{margin-top:44px;color:var(--muted);font-size:.88rem;border-top:1px solid var(--border);padding-top:16px}
+.theme{position:fixed;top:12px;right:14px;font:inherit;border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:8px;padding:4px 10px;cursor:pointer}
+@media (max-width:600px){.wrap{padding:32px 16px 56px}h1{font-size:1.8rem}}
+</style>
+</head>
+<body>
+<button class="theme" type="button" title="Clair / sombre">◐</button>
+<div class="wrap">
+  <p class="sur">Formation BStorm · Orchestration d'agents IA &amp; Monitoring</p>
+  <h1>Votre kit d'autonomie</h1>
+  <p class="intro">Tout ce qu'il faut pour revoir, approfondir et maîtriser seul LangChain 1.x, LangGraph 1.x, Langfuse et MCP, puis construire votre propre système d'agents avec les bonnes pratiques. Tout fonctionne hors ligne, sur votre machine. Ce kit vit dans le dépôt du cours, dossier <code>kit_autonomie/</code> : un <code>git pull</code> le met à jour.</p>
+
+  <div class="ordre"><strong>Par où commencer ?</strong>
+    <ol>
+      <li><a href="01_Installation/Guide_installation.html">Installez l'environnement</a> (1 à 2 h, une fois).</li>
+      <li>Suivez le <a href="02_Parcours_autonomie/Parcours_autonomie.html">parcours d'autonomie</a> : 6 semaines, notion par notion.</li>
+      <li>Construisez votre projet avec le <a href="04_Guide_interactif_projet/Guide_projet_A_a_Z.html">guide interactif de A à Z</a> et le <a href="05_Guide_Claude/Guide_Claude.html">guide Claude</a>.</li>
+    </ol>
+  </div>
+
+  <h2>Le contenu du kit</h2>
+  <div class="grille">
+    <a class="carte" href="01_Installation/Guide_installation.html"><span class="n">01</span><h3>Installation</h3><p>La stack locale chez vous : Docker, uv, Ollama, Langfuse, Qdrant. Windows, macOS, Linux. Pannes fréquentes.</p></a>
+    <a class="carte" href="02_Parcours_autonomie/Parcours_autonomie.html"><span class="n">02</span><h3>Parcours d'autonomie</h3><p>La feuille de route : quoi faire, dans quel ordre, avec quel support. Semaine par semaine.</p></a>
+    <a class="carte mis-en-avant" href="03_Support_consolide/Support_consolide.html"><span class="n">03</span><h3>Support consolidé</h3><p>Toute la matière en un document : 7 chapitres, du socle à la production, dont un cours complet sur MCP. Fiches mémo, auto-évaluations. Aussi en PDF.</p></a>
+    <a class="carte" href="../comprendre/boucle_react.html"><span class="n">comprendre/</span><h3>Comprendre, en animation</h3><p>9 mécanismes pas à pas : boucle ReAct, reducers, persistance, interrupt, retry, spécialistes, RAG, Send, MCP.</p></a>
+    <a class="carte" href="../README.md"><span class="n">racine du dépôt</span><h3>Projet HelpDesk-Ops</h3><p>Le code complet : notebooks exécutés, exercices et corrigés, construction en 9 étapes, tests, CI, Langfuse Explorer.</p></a>
+    <a class="carte mis-en-avant" href="04_Guide_interactif_projet/Guide_projet_A_a_Z.html"><span class="n">04</span><h3>Guide interactif : votre projet de A à Z</h3><p>13 étapes, du cadrage à la production : code de départ, prompt pour l'IA, critères de fin, quiz, suivi de progression.</p></a>
+    <a class="carte" href="05_Guide_Claude/Guide_Claude.html"><span class="n">05</span><h3>Guide Claude</h3><p>Travailler avec Claude sur un projet LangGraph : configuration, documentation à jour par MCP, bibliothèque de prompts, grille de relecture.</p></a>
+    <a class="carte" href="06_Ressources/Ressources.html"><span class="n">06</span><h3>Ressources</h3><p>Les meilleurs cours, tutoriels et documentations, vérifiés le 10/11/2026, et comment repérer un tuto dépassé.</p></a>
+    <a class="carte" href="07_Slides_formation/"><span class="n">07</span><h3>Slides de la formation</h3><p>Les decks projetés en séance avec leurs annexes (fiches 🔎), et les decks de référence complets, en PDF (dans le zip distribué, pas dans Git).</p></a>
+  </div>
+
+  <h2>Les animations</h2>
+  <ul class="liens-secondaires">
+    <li><a href="../comprendre/boucle_react.html">La boucle ReAct</a></li>
+    <li><a href="../comprendre/stategraph_reducers.html">StateGraph et reducers</a></li>
+    <li><a href="../comprendre/persistance_time_travel.html">Persistance et voyage dans le temps</a></li>
+    <li><a href="../comprendre/interrupt_reprise.html">interrupt() et la reprise</a></li>
+    <li><a href="../comprendre/robustesse_retry_timeout.html">Retry, timeout, error_handler</a></li>
+    <li><a href="../comprendre/coordinateur_specialistes.html">Coordinateur et spécialistes</a></li>
+    <li><a href="../comprendre/rag_hybride.html">RAG hybride</a></li>
+    <li><a href="../comprendre/send_map_reduce.html">Send et map-reduce</a></li>
+    <li><a href="../comprendre/mcp_client_serveur.html">Client et serveur MCP</a></li>
+  </ul>
+
+  <p class="pied">Les liens vers des fichiers <code>.py</code>, <code>.md</code> ou <code>.ipynb</code> s'ouvrent mieux dans VS Code ou JupyterLab. Versions de référence : Python 3.12, LangChain 1.4, LangGraph 1.2, Langfuse SDK 4.15 (serveur 4.46), Qdrant 1.19.</p>
+</div>
+<script>
+const r = document.documentElement;
+try { const t = localStorage.getItem("kit-theme"); if (t) r.dataset.theme = t; } catch (e) {}
+document.querySelector(".theme").addEventListener("click", () => {
+  const sombre = r.dataset.theme ? r.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  r.dataset.theme = sombre ? "light" : "dark";
+  try { localStorage.setItem("kit-theme", r.dataset.theme); } catch (e) {}
+});
+</script>
+</body>
+</html>

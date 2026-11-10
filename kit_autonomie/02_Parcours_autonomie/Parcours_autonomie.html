@@ -1,0 +1,337 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Parcours d&#x27;autonomie</title>
+<style>
+:root{--bg:#f7f6f2;--surface:#fff;--surface2:#f0eee8;--text:#1d1d1f;--muted:#5d5d63;--border:#dedbd2;--accent:#1f5fbf;
+--accent-soft:#e3ecfa;--code-bg:#1e1f24;--code-text:#e8e6e1}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141518;--surface:#1c1d21;--surface2:#24262b;--text:#ecebe8;
+--muted:#a3a3aa;--border:#33353b;--accent:#7aa7ff;--accent-soft:#1d2a44;--code-bg:#0f1013}}
+:root[data-theme="dark"]{--bg:#141518;--surface:#1c1d21;--surface2:#24262b;--text:#ecebe8;--muted:#a3a3aa;--border:#33353b;
+--accent:#7aa7ff;--accent-soft:#1d2a44;--code-bg:#0f1013}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.page{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:1300px;margin:0 auto}
+nav.toc{position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;overflow-x:hidden;padding:24px 14px;border-right:1px solid var(--border);font-size:.88rem}
+nav.toc ul{list-style:none;padding-left:12px;margin:0}nav.toc>ul{padding-left:0}
+nav.toc a{color:var(--text);text-decoration:none;display:block;padding:2px 6px;border-radius:6px}
+nav.toc a:hover{background:var(--surface2)}
+nav.toc .retour{display:block;margin-bottom:12px;color:var(--accent)}
+main{padding:32px 40px 80px;min-width:0}
+h1{font-size:2rem;line-height:1.2;margin:1.6em 0 .5em;padding-top:.6em;border-top:3px solid var(--accent)}
+h1:first-child{margin-top:0;border-top:0;padding-top:0}
+h2{font-size:1.4rem;margin:1.8em 0 .5em;line-height:1.3}h3{font-size:1.12rem;margin:1.4em 0 .4em}
+a{color:var(--accent)}
+code{font-family:ui-monospace,"Cascadia Code",Consolas,monospace;font-size:.9em}
+:not(pre)>code{background:var(--surface2);padding:.05em .35em;border-radius:4px}
+pre{background:var(--code-bg);color:var(--code-text);padding:14px 16px;border-radius:8px;overflow:auto;font-size:.84rem;line-height:1.5}
+pre.mermaid{background:var(--surface);color:var(--text);border:1px solid var(--border);text-align:center}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.92rem;display:block;overflow-x:auto}
+th,td{border:1px solid var(--border);padding:6px 10px;text-align:left;vertical-align:top}
+th{background:var(--surface2)}
+blockquote{margin:12px 0;padding:10px 16px;background:var(--accent-soft);border-left:4px solid var(--accent);border-radius:0 8px 8px 0}
+blockquote p{margin:.3em 0}
+details{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 16px;margin:12px 0}
+summary{cursor:pointer;font-weight:600}
+li{margin:3px 0}
+.theme{position:fixed;top:12px;right:14px;font:inherit;border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:8px;padding:4px 10px;cursor:pointer}
+@media (max-width:900px){.page{grid-template-columns:1fr}nav.toc{position:static;max-height:none;border-right:0;border-bottom:1px solid var(--border)}main{padding:20px 16px 60px}}
+@media print{nav.toc,.theme{display:none}.page{display:block}main{padding:0}h1{page-break-before:always;border-top:0}
+h1:first-child{page-break-before:avoid}pre{white-space:pre-wrap;word-break:break-word}details{border:0;padding:0}
+pre,blockquote,.mermaid{page-break-inside:avoid}body{background:#fff;color:#000;font-size:11pt}}
+</style></head><body><button class="theme" type="button" title="Clair / sombre">◐</button>
+<div class="page"><nav class="toc"><a class="retour" href="../00_COMMENCEZ_ICI.html">← Accueil du kit</a><div class="toc">
+<ul>
+<li><a href="#votre-parcours-dautonomie">Votre parcours d'autonomie</a><ul>
+<li><a href="#le-kit-en-un-coup-dil">Le kit en un coup d'œil</a></li>
+<li><a href="#la-methode-pour-chaque-notion">La méthode, pour chaque notion</a></li>
+<li><a href="#semaine-0-remettre-la-stack-en-route-1-a-2-h">Semaine 0 · Remettre la stack en route (1 à 2 h)</a></li>
+<li><a href="#semaine-1-les-fondations-consolidation">Semaine 1 · Les fondations (consolidation)</a></li>
+<li><a href="#semaine-2-des-agents-qui-se-souviennent-et-qui-demandent">Semaine 2 · Des agents qui se souviennent et qui demandent</a></li>
+<li><a href="#semaine-3-plusieurs-agents-des-connaissances-et-mcp">Semaine 3 · Plusieurs agents, des connaissances, et MCP</a></li>
+<li><a href="#semaine-4-observer-mesurer-securiser">Semaine 4 · Observer, mesurer, sécuriser</a></li>
+<li><a href="#semaines-5-et-6-votre-projet-de-a-a-z">Semaines 5 et 6 · Votre projet, de A à Z</a></li>
+<li><a href="#les-reflexes-a-garder">Les réflexes à garder</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav>
+<main><h1 id="votre-parcours-dautonomie">Votre parcours d'autonomie</h1>
+<p>La formation s'arrête, votre apprentissage non. Ce parcours vous dit <strong>quoi faire, dans quel ordre, et avec quel
+support</strong>, pour maîtriser seul tout ce qui a été vu, vite ou pas du tout (MCP notamment), puis pour construire
+votre propre projet.</p>
+<p>Comptez <strong>6 semaines à raison de 4 à 6 heures par semaine</strong>. Le rythme importe moins que la régularité.</p>
+<hr />
+<h2 id="le-kit-en-un-coup-dil">Le kit en un coup d'œil</h2>
+<p>Le kit est dans le dépôt du cours, dossier <code>kit_autonomie/</code> (page d'accueil : <code>kit_autonomie/00_COMMENCEZ_ICI.html</code>).
+Le code, lui, est à la racine du dépôt.</p>
+<table>
+<thead>
+<tr>
+<th>Où</th>
+<th>Quand l'ouvrir</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kit_autonomie/01_Installation</code></td>
+<td>en premier : remettre la stack en route chez vous</td>
+</tr>
+<tr>
+<td><code>kit_autonomie/02_Parcours_autonomie</code></td>
+<td>ce document : votre feuille de route</td>
+</tr>
+<tr>
+<td><code>kit_autonomie/03_Support_consolide</code></td>
+<td><strong>le cours complet</strong> en un seul document (HTML et PDF), 7 chapitres, avec fiches mémo et auto-évaluations</td>
+</tr>
+<tr>
+<td><code>comprendre/</code></td>
+<td>avant chaque notion difficile : les mécanismes en animation pas à pas</td>
+</tr>
+<tr>
+<td><code>notebooks/</code>, <code>exercices/</code>, <code>construction/</code></td>
+<td>le code : notebooks exécutés, exercices et corrigés, construction étape par étape</td>
+</tr>
+<tr>
+<td><code>kit_autonomie/04_Guide_interactif_projet</code></td>
+<td>semaines 5 et 6 : construire <strong>votre</strong> projet de A à Z</td>
+</tr>
+<tr>
+<td><code>kit_autonomie/05_Guide_Claude</code></td>
+<td>dès que vous codez votre projet : travailler avec Claude sans perdre la main</td>
+</tr>
+<tr>
+<td><code>kit_autonomie/06_Ressources</code></td>
+<td>pour aller plus loin : les meilleurs tutoriels et cours, vérifiés</td>
+</tr>
+<tr>
+<td><code>kit_autonomie/07_Slides_formation</code></td>
+<td>les slides projetées en séance et leurs annexes (fiches 🔎) ; dans le zip distribué seulement</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="la-methode-pour-chaque-notion">La méthode, pour chaque notion</h2>
+<ol>
+<li><strong>Voir</strong> : l'animation de <code>comprendre/</code> (5 minutes, flèches ← →, essayez les deux branches).</li>
+<li><strong>Lire</strong> : la section du support consolidé (l'idée, le code, ce qu'on observe, les pièges).</li>
+<li><strong>Exécuter</strong> : le notebook, cellule par cellule, puis l'étape de construction correspondante.</li>
+<li><strong>Refaire</strong> : l'exercice <strong>sans</strong> ouvrir le corrigé (<code>exercices/enonces/</code>). Bloqué plus de 20 minutes : la
+   fiche 🔎 de l'annexe des slides, puis seulement le corrigé (<code>exercices/corriges/</code>).</li>
+<li><strong>Comparer</strong> les étapes de construction : dans VS Code, clic droit sur l'étape 3 › <em>Select for Compare</em>, puis sur
+   l'étape 4 › <em>Compare with Selected</em>. Les ajouts sont marqués <code># ═══ NOUVEAU (étape N)</code>.</li>
+<li><strong>Observer</strong> : la trace dans Langfuse à chaque lancement. Le dessin, l'exécution et la trace racontent la
+   même histoire.</li>
+<li><strong>Vérifier</strong> : l'auto-évaluation en fin de chapitre. Moins de 5 sur 6 : relisez la section concernée.</li>
+</ol>
+<hr />
+<h2 id="semaine-0-remettre-la-stack-en-route-1-a-2-h">Semaine 0 · Remettre la stack en route (1 à 2 h)</h2>
+<ul>
+<li>[ ] <code>01_Installation/Guide_installation</code> jusqu'au smoke test vert</li>
+<li>[ ] <code>uv run --project infrastructure pytest construction/test_etapes.py -q</code> : tout est câblé</li>
+<li>[ ] Lancer l'étape 0 et retrouver sa trace dans Langfuse</li>
+<li>[ ] Support, <strong>chapitre 1</strong> (la stack locale). Facultatif : le notebook <code>J0_01</code> qui reconstruit la stack</li>
+</ul>
+<h2 id="semaine-1-les-fondations-consolidation">Semaine 1 · Les fondations (consolidation)</h2>
+<table>
+<thead>
+<tr>
+<th>Notion</th>
+<th>Animation</th>
+<th>Support</th>
+<th>Pratique</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Chaîne LCEL, traçage Langfuse</td>
+<td></td>
+<td>ch. 2</td>
+<td><code>J1_01</code>, étapes 0 et 1, défi J1-01</td>
+</tr>
+<tr>
+<td>Agent et outils, boucle ReAct</td>
+<td><code>boucle_react.html</code></td>
+<td>ch. 2</td>
+<td><code>J1_02</code>, étape 2</td>
+</tr>
+<tr>
+<td>StateGraph, état, reducers, routage</td>
+<td><code>stategraph_reducers.html</code></td>
+<td>ch. 2</td>
+<td><code>J1_03</code>, étape 3, <strong>Ex1.1</strong>, défi 3</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>[ ] Ex1.1 refait sans corrigé · [ ] Ex1.2 (garde-fou) · [ ] auto-évaluation du chapitre 2</li>
+</ul>
+<h2 id="semaine-2-des-agents-qui-se-souviennent-et-qui-demandent">Semaine 2 · Des agents qui se souviennent et qui demandent</h2>
+<table>
+<thead>
+<tr>
+<th>Notion</th>
+<th>Animation</th>
+<th>Support</th>
+<th>Pratique</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Persistance, <code>thread_id</code>, voyage dans le temps, effacement</td>
+<td><code>persistance_time_travel.html</code></td>
+<td>ch. 3</td>
+<td><code>J2_01</code>, étape 4</td>
+</tr>
+<tr>
+<td><code>interrupt()</code>, <code>Command(resume=…)</code>, idempotence</td>
+<td><code>interrupt_reprise.html</code></td>
+<td>ch. 3</td>
+<td><code>J2_02</code>, étape 5, défi 5, <strong>Ex2.1</strong></td>
+</tr>
+<tr>
+<td>Sortie structurée, plancher d'urgence</td>
+<td></td>
+<td>ch. 3</td>
+<td><code>J2_03</code>, étape 6a</td>
+</tr>
+<tr>
+<td><code>RetryPolicy</code>, <code>TimeoutPolicy</code>, <code>error_handler</code></td>
+<td><code>robustesse_retry_timeout.html</code></td>
+<td>ch. 3</td>
+<td><code>J2_04</code>, étape 6 (<code>--panne 2</code>, <code>--panne 5</code>), <strong>Ex2.2</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>[ ] <code>J2_05_bilan_sessions</code> · [ ] auto-évaluation du chapitre 3</li>
+</ul>
+<h2 id="semaine-3-plusieurs-agents-des-connaissances-et-mcp">Semaine 3 · Plusieurs agents, des connaissances, et MCP</h2>
+<p>C'est la semaine la plus importante si vous n'avez pas vu MCP en séance : le <strong>chapitre 5</strong> est écrit comme un
+cours complet, avec un TP guidé.</p>
+<table>
+<thead>
+<tr>
+<th>Notion</th>
+<th>Animation</th>
+<th>Support</th>
+<th>Pratique</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Les 5 patterns multi-agents</td>
+<td><code>coordinateur_specialistes.html</code></td>
+<td>ch. 4</td>
+<td><code>J3_01</code></td>
+</tr>
+<tr>
+<td>RAG hybride sur Qdrant</td>
+<td><code>rag_hybride.html</code></td>
+<td>ch. 4</td>
+<td><code>J3_02</code>, étape 7 (<code>--indexer</code> d'abord)</td>
+</tr>
+<tr>
+<td>Spécialistes comme outils</td>
+<td><code>coordinateur_specialistes.html</code></td>
+<td>ch. 4</td>
+<td>étape 7, <strong>Ex3.1</strong>, défi 8a</td>
+</tr>
+<tr>
+<td>Parallélisme <code>Send</code>, Deep Agents</td>
+<td><code>send_map_reduce.html</code></td>
+<td>ch. 4</td>
+<td><code>J3_03</code>, <code>J3_05</code></td>
+</tr>
+<tr>
+<td><strong>MCP</strong> : serveur FastMCP, client, liste blanche</td>
+<td><code>mcp_client_serveur.html</code></td>
+<td><strong>ch. 5</strong></td>
+<td><code>J3_04</code>, étape 7, <strong>TP du chapitre 5</strong>, Ex5.1</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>[ ] Le TP « Créez votre propre serveur MCP » terminé · [ ] auto-évaluations des chapitres 4 et 5</li>
+</ul>
+<h2 id="semaine-4-observer-mesurer-securiser">Semaine 4 · Observer, mesurer, sécuriser</h2>
+<table>
+<thead>
+<tr>
+<th>Notion</th>
+<th>Support</th>
+<th>Pratique</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Observabilité, API, RGPD des traces, prompts versionnés</td>
+<td>ch. 6</td>
+<td><code>J4_01</code>, <code>J4_02</code>, <code>J4_03</code></td>
+</tr>
+<tr>
+<td>Scores, juge LLM et sa calibration</td>
+<td>ch. 6</td>
+<td><code>J4_04</code>, étape 8 <code>--juger</code></td>
+</tr>
+<tr>
+<td>Datasets et experiments, comparer deux runs</td>
+<td>ch. 6</td>
+<td><code>J4_05</code>, étape 8 <code>--evaluer</code>, défis 8b et 8c, <strong>Ex4.1</strong></td>
+</tr>
+<tr>
+<td>Middleware, garde-fou, liste blanche et audit, red-team</td>
+<td>ch. 7</td>
+<td><code>J5_01</code>, <code>J5_02</code>, <strong>Ex5.1</strong></td>
+</tr>
+<tr>
+<td>Conformité, gate en CI, <code>langgraph dev</code></td>
+<td>ch. 7</td>
+<td><code>J5_03</code>, <code>J5_04</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>[ ] <strong>Langfuse Explorer</strong> (<code>langfuse-explorer</code>) : un Langfuse seul, sans modèle ni GPU,
+  rempli de 7 jours d'activité synthétique, et 33 missions guidées pour maîtriser l'interface
+  (<code>start.ps1</code> ou <code>start.sh</code>, puis <code>guide/index.html</code>)</li>
+<li>[ ] <strong>Examen blanc</strong> : le mini-projet « HelpDesk-Ops parle néerlandais »
+  (<code>exercices/enonces/MiniProjet_J4_neerlandais.ipynb</code>). Il combine garde-fou, graphe, dataset et sécurité. Le
+  corrigé existe : ne l'ouvrez qu'à la fin.</li>
+</ul>
+<h2 id="semaines-5-et-6-votre-projet-de-a-a-z">Semaines 5 et 6 · Votre projet, de A à Z</h2>
+<ul>
+<li>[ ] <code>04_Guide_interactif_projet/Guide_projet_A_a_Z.html</code> : 13 étapes, de la fiche projet à la production,
+  avec cases à cocher, code de départ, prompt pour l'IA, critère de fin et quiz</li>
+<li>[ ] <code>05_Guide_Claude</code> : configurer Claude (règles, documentation à jour par MCP, permissions) et utiliser la
+  bibliothèque de prompts</li>
+<li>[ ] Un commit par étape terminée ; « Exporter mes notes » à la fin de chaque séance de travail</li>
+</ul>
+<hr />
+<h2 id="les-reflexes-a-garder">Les réflexes à garder</h2>
+<ul>
+<li><strong>Dessiner, exécuter, observer</strong> : <code>draw_ascii()</code> avant de lancer, puis la trace Langfuse après.</li>
+<li><strong>Un format valide n'est pas une décision juste</strong> : une règle explicable en Python garde le dernier mot.</li>
+<li><strong>Les consignes au modèle vont dans le prompt</strong> : en <code>json_schema</code>, le modèle ne lit pas <code>Field(description=…)</code>.</li>
+<li><strong>Rien qui touche le monde extérieur avant <code>interrupt()</code></strong> : le nœud repart du début à la reprise.</li>
+<li><strong>Une erreur se journalise avant le repli poli</strong> : un repli silencieux cache les pannes.</li>
+<li><strong>Un outil n'est donné qu'à qui en a besoin</strong> ; un serveur MCP passe par une liste blanche côté client.</li>
+<li><strong>Ce qui n'est pas mesuré n'est qu'une impression</strong> : un changement de prompt, de modèle ou de règle repasse
+  par l'experiment, et on compare les runs.</li>
+</ul></main></div>
+<script src="../_assets/mermaid.min.js"></script>
+<script>
+const racine = document.documentElement;
+const sombre = () => racine.dataset.theme ? racine.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+try { const t = localStorage.getItem("kit-theme"); if (t) racine.dataset.theme = t; } catch (e) {}
+if (location.search.includes("print")) racine.dataset.theme = "light";
+document.querySelector(".theme").addEventListener("click", () => {
+  racine.dataset.theme = sombre() ? "light" : "dark";
+  try { localStorage.setItem("kit-theme", racine.dataset.theme); } catch (e) {}
+  location.reload();
+});
+if (location.search.includes("print")) document.querySelectorAll("details").forEach(d => d.open = true);
+window.addEventListener("beforeprint", () => document.querySelectorAll("details").forEach(d => d.open = true));
+if (window.mermaid) { mermaid.initialize({ startOnLoad: true, theme: sombre() ? "dark" : "default", securityLevel: "strict" }); }
+</script>
+</body></html>
