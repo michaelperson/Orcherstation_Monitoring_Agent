@@ -8,7 +8,6 @@ ci/scores_gate.json
 
 # Dépôt apprenants (github.com/michaelperson/Orcherstation_Monitoring_Agent) : rien du formateur
 guide_formateur/
-exercices/corriges/
 AUDIT_FORMATION_Agents_Monitoring.md
 Prepa/
 # Générateurs : les build_ex*.py contiennent les corrigés ; gabarit et polices des decks
