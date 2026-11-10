@@ -25,6 +25,7 @@ Lancer :
 import argparse
 import asyncio
 import json
+import logging   # ═══ NOUVEAU (étape 6)
 from pathlib import Path
 from typing import Literal
 
@@ -134,6 +135,9 @@ llm_outils = llm.bind_tools(OUTILS)
 # ═══ NOUVEAU (étape 6) : ce qui mérite un nouvel essai. Une erreur de code (KeyError…) ne se réessaie pas ═══
 ERREURS_RESEAU_LLM = (ConnectionError, httpx.TransportError, openai.APIConnectionError, openai.InternalServerError)
 REPLI = "Je n'ai pas pu traiter votre demande automatiquement : je la transmets à un technicien N1."
+# ═══ NOUVEAU (étape 6) : le journal. Le repli rassure l'utilisateur, le journal garde la vraie cause (stderr) ═══
+logging.basicConfig(format="⚠️  %(asctime)s %(name)s · %(message)s", datefmt="%H:%M:%S")
+journal = logging.getLogger("helpdesk-ops")
 
 
 def enregistrer_ticket(cle: str, **champs) -> tuple[dict, bool]:
@@ -181,10 +185,12 @@ def apres_agent(state: EtatTicket) -> Literal["tools", "valider", "creer_ticket"
 
 # ═══ NOUVEAU (étape 6) : les replis. Après un error_handler, les arêtes normales ne sont PAS suivies : goto obligatoire ═══
 def agent_en_echec(state: EtatTicket, error: NodeError) -> Command[Literal["__end__"]]:
+    journal.error("nœud %s en échec, repli envoyé à l'utilisateur : %r", error.node, error.error)
     return Command(update={"messages": [AIMessage(REPLI)]}, goto=END)   # pas de ticket sur une analyse incomplète
 
 
 def outils_en_echec(state: EtatTicket, error: NodeError) -> Command[Literal["agent"]]:
+    journal.warning("nœud %s en échec, l'agent est prévenu : %r", error.node, error.error)
     # Une réponse par appel d'outil en attente : sans elles, le modèle reçoit un historique invalide
     motif = type(error.error).__name__
     reponses = [ToolMessage(content=f"outil indisponible ({motif}) : ne pas réessayer, le signaler à l'utilisateur",

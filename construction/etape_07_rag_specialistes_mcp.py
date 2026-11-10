@@ -26,6 +26,7 @@ Lancer :
 import argparse
 import asyncio
 import json
+import logging
 from pathlib import Path
 from typing import Literal
 
@@ -140,6 +141,9 @@ OUTILS_MCP = filtrer_outils(OUTILS_MCP_PROPOSES, autorises={"lister_postes", "de
 
 ERREURS_RESEAU_LLM = (ConnectionError, httpx.TransportError, openai.APIConnectionError, openai.InternalServerError)
 REPLI = "Je n'ai pas pu traiter votre demande automatiquement : je la transmets à un technicien N1."
+# Le repli rassure l'utilisateur, le journal garde la vraie cause (stderr)
+logging.basicConfig(format="⚠️  %(asctime)s %(name)s · %(message)s", datefmt="%H:%M:%S")
+journal = logging.getLogger("helpdesk-ops")
 
 # ═══ NOUVEAU (étape 7) : les spécialistes. Un outil n'est donné qu'à l'agent qui en a besoin (OWASP ASI02) ═══
 SPECIALISTES = {
@@ -213,6 +217,7 @@ def apres_coordinateur(state: EtatTicket) -> Literal["valider", "creer_ticket"]:
 
 
 def agent_en_echec(state: EtatTicket, error: NodeError) -> Command[Literal["__end__"]]:
+    journal.error("nœud %s en échec, repli envoyé à l'utilisateur : %r", error.node, error.error)
     return Command(update={"messages": [AIMessage(REPLI)]}, goto=END)   # pas de ticket sur une analyse incomplète
 
 

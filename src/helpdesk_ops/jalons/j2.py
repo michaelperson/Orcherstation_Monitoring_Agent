@@ -15,6 +15,7 @@
 Graphe asynchrone (les timeouts l'exigent) : utiliser `ainvoke` / `astream`.
 À distribuer après le débriefing de J2 : ce module contient les corrigés des exercices 2.1 et 2.2.
 """
+import logging
 from typing import Awaitable, Callable, Literal
 
 import httpx
@@ -34,6 +35,8 @@ from helpdesk_ops.outils import chercher_kb, statut_serveur
 from helpdesk_ops.reseau import ping_serveur
 from helpdesk_ops.ticketing import TICKETING, Ticketing
 from helpdesk_ops.tri import file_attente
+
+journal = logging.getLogger("helpdesk_ops")   # le repli rassure l'utilisateur, le journal garde la vraie cause
 
 # Pannes transitoires d'un appel LLM, quel que soit le moteur (Ollama ou vLLM)
 ERREURS_RESEAU_LLM = (ConnectionError, httpx.TransportError, openai.APIConnectionError, openai.InternalServerError)
@@ -137,15 +140,18 @@ def construire_support_j2(
         return {"messages": [await llm_outils.ainvoke([PROMPT_SYSTEME, *state["messages"]])]}
 
     def agent_en_echec(state: EtatJ2, error: NodeError) -> Command:
+        journal.error("nœud %s en échec, repli envoyé : %r", error.node, error.error)
         # Retries épuisés ou timeout : réponse polie, et surtout pas de ticket créé sur une analyse incomplète
         return Command(update={"messages": [AIMessage(REPLI)]}, goto=END)
 
     def qualification_en_echec(state: EtatJ2, error: NodeError) -> Command:
+        journal.error("nœud %s en échec, demande transmise au N1 : %r", error.node, error.error)
         return Command(update={"qualification": None,
                                "messages": [AIMessage("Votre demande est transmise au help-desk N1 pour qualification.")]},
                        goto=END)
 
     def outils_en_echec(state: EtatJ2, error: NodeError) -> Command[Literal["agent"]]:
+        journal.warning("nœud %s en échec, l'agent est prévenu : %r", error.node, error.error)
         # ⚠️ Après un error_handler, les arêtes normales du nœud ne sont PAS suivies : sans goto, le graphe s'arrête
         return Command(update={"messages": messages_outils_de_repli(state, type(error.error).__name__)}, goto="agent")
 
