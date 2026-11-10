@@ -229,8 +229,10 @@ faux ». 📚 étape 8, défis B et C, J4-04, J4-05, J5-01, J5-02.
 
 ### Ensuite · Vers la production
 
-- `langgraph.json` + `langgraph dev` pour servir le graphe et l'inspecter dans le Studio (voir celui de la racine
-  du cours).
+- `langgraph.json` + `langgraph dev` pour servir le graphe par une API locale (`http://127.0.0.1:2024/docs`), voir
+  celui de la racine du cours et `infrastructure/serveur_langgraph.*`. Le « Studio » que propose `langgraph dev` est
+  une page web **hébergée par LangChain** (smith.langchain.com) : elle sort de la stack locale, d'où le
+  `--no-browser` du cours. À n'utiliser qu'avec des données fictives, et en connaissance de cause.
 - Une **gate d'évaluation en CI** : l'experiment tourne à chaque modification, la fusion est bloquée si un score
   baisse (J5-04).
 - La conformité : registre des traitements, durée de conservation des traces, information des utilisateurs (J5-03).
